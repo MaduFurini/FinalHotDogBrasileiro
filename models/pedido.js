@@ -8,12 +8,22 @@ const Pedido = database.define('pedidos', {
         allowNull: false,
         primaryKey: true
     },
+    id_usuario: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'usuarios',
+            key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+    },
     codigo:{
         type: Sequelize.STRING,
         allowNull: false
     },
     status:{
-        type: Sequelize.ENUM ('Realizado', 'Em andamento', 'Entregue'),
+        type: Sequelize.ENUM ('Realizado', 'Em andamento', 'Entregue', 'Cancelado', 'Inativado'),
         allowNull: false,
     },
     valorTotal:{

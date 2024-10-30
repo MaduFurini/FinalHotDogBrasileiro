@@ -7,7 +7,8 @@ const Produto = require('../models/produto');
 const Categoria = require('../models/categoria');
 const RegistroLog = require('../models/registroLogs');
 const Funcionario = require('../models/usuario');
-const Sequelize = require("sequelize");
+
+const {Op} = require("sequelize");
 
 const indexFuncionarios = async (req) => {
     const page = parseInt(req.query.page) || 1;
@@ -54,12 +55,21 @@ const storeFuncionarios = async (req) => {
 
         const user = await Funcionario.findOne({
             where: {
-                email: email
+                [Op.or]: [
+                    { email: email },
+                    { cpf: cpf }
+                ]
             }
         });
 
         if (user) {
-            return { success: false, message: 'Email já existente' };
+            let message;
+            if (user.email === email) {
+                message = 'Email já existente';
+            } else {
+                message = 'CPF já existente';
+            }
+            return { success: false, message };
         }
 
         await Funcionario.create({
@@ -93,14 +103,25 @@ const updateFuncionarios = async (req) => {
 
         const senhaHasheada = await bcrypt.hash(senha, 10);
 
-        const user = await Funcionario.findOne({
-            where: {
-                email: email
-            }
-        });
+        if (email || cpf) {
+            const user = await Funcionario.findOne({
+                where: {
+                    [Op.or]: [
+                        {email: email},
+                        {cpf: cpf}
+                    ]
+                }
+            });
 
-        if (user) {
-            return { success: false, message: 'Email já existente' };
+            if (user) {
+                let message;
+                if (user.email === email) {
+                    message = 'Email já existente';
+                } else {
+                    message = 'CPF já existente';
+                }
+                return {success: false, message};
+            }
         }
 
         funcionario.nome = nome || funcionario.nome;

@@ -5,6 +5,7 @@ const fs = require("fs");
 const ProdutoPedido = require("../models/produtoPedido");
 const Produto = require('../models/produto');
 const Categoria = require('../models/categoria');
+
 const indexCategorias = async (req) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 5;

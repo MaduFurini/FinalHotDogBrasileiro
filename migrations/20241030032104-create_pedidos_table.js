@@ -25,7 +25,7 @@ module.exports = {
         allowNull: false
       },
       status:{
-        type: Sequelize.ENUM ('Realizado', 'Em andamento', 'Entregue'),
+        type: Sequelize.ENUM ('Realizado', 'Em andamento', 'Entregue', 'Cancelado', 'Inativado'),
         allowNull: false,
       },
       valorTotal:{

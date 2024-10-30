@@ -124,7 +124,7 @@ function openUpdateModal(productId) {
                         <form id="updateForm" >
                             <div class="form-group">
                                 <label for="nome">Nome da categoria</label>
-                                <input type="text" class="input" id="nome" name="nome" value="${categoria.nome}"  required>
+                                <input type="text" class="input" id="nome" name="nome" value="${categoria.nome}">
                             </div>
                             <div class="form-group">
                                 <label for="descricao">Descrição da categoria</label>

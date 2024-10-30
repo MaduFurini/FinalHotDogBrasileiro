@@ -1339,3 +1339,19 @@ option:hover {
 .form-group {
     margin-bottom: 15px;
 }
+
+.tooltip {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    color: #333;
+}
+

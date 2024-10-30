@@ -57,6 +57,44 @@ const indexProdutos = async (req) => {
     }
 };
 
+const indexProdutosCardapio = async (req) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5;
+    const offset = (page - 1) * limit;
+
+    try {
+        const { count, rows: produtos } = await Produto.findAndCountAll({
+            limit: limit,
+            offset: offset
+        });
+
+        const categoriaIds = produtos.map(produto => produto.id_categoria);
+
+        const categorias = await Categoria.findAll({
+            where: {
+                id: categoriaIds
+            }
+        });
+
+        const categoriaMap = {};
+        categorias.forEach(categoria => {
+            categoriaMap[categoria.id] = categoria.nome;
+        });
+
+        const produtosComCategoria = produtos.map(produto => ({
+            ...produto.dataValues,
+            categoria: categoriaMap[produto.id_categoria] || 'Categoria não encontrada'
+        }));
+
+        const totalPages = Math.ceil(count / limit);
+
+        return { produtos: produtosComCategoria, currentPage: page, totalPages };
+    } catch (error) {
+        console.error("Erro ao listar produtos:", error);
+        return { error: "Erro ao listar produtos" };
+    }
+};
+
 const storeProdutos = async (req) => {
     const { id_categoria, nome, descricao, preco } = req.body;
 

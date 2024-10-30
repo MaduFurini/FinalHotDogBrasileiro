@@ -1,0 +1,300 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
+
+body {
+    margin: 0px;
+    font-family:'Dosis';
+}
+
+header {
+    margin: 0px;
+}
+
+:root {
+    --corFundo1: #700500;
+    --branco: #FFFFFF;
+    --preto: black;
+    --amarelo-gema: #EFCA48;
+}
+
+a{
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    #cabecalho {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container-titulo {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #imagem-titulo {
+        width: 80%;
+        margin-top: 20px;
+    }
+
+    #card-combos, #cliente-avaliacao {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    #texto-titulo {
+        font-size: 1.5em;
+    }
+
+    #cabecalho h3 {
+        font-size: 1.2em;
+    }
+
+    .card-combo1 {
+        width: 90%;
+    }
+
+    button {
+        width: 100%;
+        padding: 15px;
+    }
+}
+/* daqui pra baixo */
+#cabecalho {
+    background-color: var(--corFundo1);
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--branco);
+
+}
+
+.container-texto {
+    display: inline-flex;
+    justify-content: space-between;
+    padding-right: 11%;
+    width: 25%;
+    font-size: 23px;
+    font-weight: lighter;
+    word-spacing: 80px;
+}
+#logoHeader {
+    width: 15vh;
+    height: 15vh;
+    padding: 10px;
+}
+
+/* titulo */
+#texto-titulo {
+    width: 70vh;
+    color: var(--branco);
+}
+
+#texto-subtitulo {
+    width: 50vh;
+    color: var(--amarelo-gema);
+
+}
+
+#botao-pedir {
+    width: 140px;
+    height: 40px;
+    background-color: var(--amarelo-gema);
+    color: var(--corFundo1);
+    border-radius: 5px;
+    border: var(--branco);
+    font-family: 'Dosis';
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.container-titulo {
+    display:flex;
+    justify-content: space-evenly;
+    height: 60vh;
+    width: 100%;
+    background-color: var(--corFundo1);
+}
+
+#imagem-titulo {
+    width: 70vh;
+    height: 48vh;
+    border-radius: 20px;
+}
+
+#card-combos {
+    display: flex;
+    justify-content: space-evenly;
+    height: 500px;
+
+}
+
+#card-cardapio {
+    background-color: var(--corFundo1);
+    color: var(--amarelo-gema);
+    height: 30vh;
+    width: 100%;
+    text-align: center;
+    padding-top: 7vh;
+}
+#card-cardapio h1{
+    color: var(--branco);
+}
+.sobre-descricao {
+    display: inline;
+    gap: 40px;
+    font-size: 25px;
+    font-weight: 500;
+    width: 100px;
+}
+.sobre-img {
+    width: 55vh;
+    height: 60vh;
+    border-radius: 6vh;
+}
+
+#sobre-titulo {
+    padding-left: 6vh;
+    font-size: 30px;
+    margin: 0%;
+    display: flex;
+    justify-content: space-between;
+}
+
+#titulo-avaliacao {
+    text-align: center;
+    font-size: 4vh;
+}
+
+.img-cliente {
+    width: 8vh;
+    border-radius: 5vh;
+}
+
+#cliente-avaliacao {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: var(--amarelo-gema);
+    height: 30vh;
+}
+
+.cliente-comentario {
+    background-color: var(--branco);
+    width: 30vh;
+    height: 20vh;
+    margin-top: 5vh;
+}
+#texto-titulo {
+    align-items: center;
+    font-size:42px;
+    margin: 0%;
+    font-weight: bold;
+}
+#sobre{
+    display: flex;
+    justify-content: space-evenly;
+}
+.texto-titulo-combo{
+    color: var(--corFundo1);
+    font-weight: bolder;
+    padding-left: 6vh ;
+    margin: 0%;
+    font-size: larger;
+    font-weight: 1000;
+}
+.card-preco{
+    display: flex;
+    justify-content: space-between;
+    padding-left: 6vh ;
+    margin: 0%;
+}
+.btn-combo{
+    background-color: var(--corFundo1);
+    color: var(--branco);
+    width:160px;
+    height: 40px;
+    border-radius: 7px;
+    font-weight: 500;
+    font-size: 20px;
+}
+.card-combo1{
+    border: 1px solid rgb(210, 210, 210);
+    border-radius: 1vh;
+    height: fit-content;
+    width: 500px;
+    font-weight: 500;
+    box-shadow:  2px 5px 5px rgb(105, 90, 90);
+    padding: 10px;
+    display: block;
+
+}
+#titulo-combos{
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 4vh;
+    padding: 10px;
+}
+.imgcm{
+
+    display: flex;
+    justify-content: center;
+    border-radius: 3vh;
+    width: 430px;
+    height: 250px;
+}
+.informacoes-combo{
+    padding-left: 6vh;
+    padding-top: 2vh;
+
+}
+#btn-cardapio{
+    background-color: var(--amarelo-gema);
+    color: var(--corFundo1);
+    width: 140px;
+    height: 40px;
+    border-radius: 1vh;
+    font-weight: bolder;
+    font-weight: 1000;
+    border-color: var(--amarelo-gema);
+}
+#container-texto1{
+    display: block;
+}
+#container-imagem{
+    display: block;
+    justify-items: center;
+}
+#container-sobre{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20vh 0;
+    width: 100%;
+    height: 70vh;
+}
+#container-sobre div {
+    width: 50%;
+    padding: 0 70px;
+    height: 70vh;
+}
+.sobre-img {
+    display: flex;
+    flex-direction: column;
+}
+.sobre-img h1 {
+    margin: 0;
+    padding: 0 !important;
+    font-size: 48px !important;
+    font-weight: 900 !important;
+}
+.sobre-img img {
+    height: 100vh;
+    width: 90%;
+}
+
+

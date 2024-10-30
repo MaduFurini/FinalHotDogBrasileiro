@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hot Dog Brasileiro | Produtos</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@48,400,0,0" />
+  <link rel="shortcut icon" href="/images/hotdog.png">
+
+  <link rel="stylesheet" href="/css/admin/admin.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/produtos.css">
+
+</head>
+<body>
+   <div class="container">
+      <aside class="bg-pattern text-white">
+         <div class="top">
+           <div class="logo">
+               <img src="/images/hotdog.png" alt=""/>
+           </div>
+           <div class="close" id="close_btn">
+            <span class="material-symbols-sharp">
+              close
+              </span>
+           </div>
+         </div>
+         <!-- end top -->
+          <div class="sidebar bg-pattern text-white">
+            <h3 class="user">Olá User</h3>
+
+               <a href="#">
+                  <span class="material-symbols-sharp">receipt_long </span>
+                  <h3>Pedidos</h3>
+               </a>
+               <a href="#" class="active">
+                  <span class="material-symbols-sharp">grocery </span>
+                  <h3>Produtos</h3>
+               </a>
+               <a href="/funcionarios">
+                  <span class="material-symbols-sharp">person_outline </span>
+                  <h3>Funcionários</h3>
+               </a>
+               <a href="#">
+                  <span class="material-symbols-sharp">logout </span>
+                  <h3>Sair</h3>
+               </a>
+          </div>
+      </aside>
+
+      <main>
+           <h1>Produtos</h1>
+
+           <div class="listHeader libre-franklin">
+            <div class="filter">
+                <div class="filter-input">
+                    <label for="">Buscar produto</label>
+                    <div class="input-and-buttons">
+                        <input type="text" id="searchInput" placeholder="Nome do produto">
+                        <div class="filter-buttons">
+                            <button class="btn btn-secondary" onclick="cleanFilter()">Limpar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="newProduct libre-franklin">
+                <button id="openModalButton" onclick="openCreateModal()">
+                    <span class="material-symbols-sharp">add</span> Novo produto
+                </button>
+            </div>
+        </div>
+
+       <!-- end insights -->
+      <div class="recent_order">
+        <table>
+            <thead>
+                <tr>
+                    <th>Imagem</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="productContainer">
+                <% if (produtos && produtos.length > 0) { %>
+                    <% produtos.forEach(produto => { %>
+                        <tr>
+                            <td>
+                                <img src="<%= produto.img %>" alt="<%= produto.nome %>" class="product-image">
+                            </td>
+                            <td><%= produto.nome %></td>
+                            <td><%= produto.descricao %></td>
+                            <td>
+                                <label class="switch">
+                                    <input type="checkbox"
+                                           class="status-checkbox"
+                                           data-id="<%= produto.id %>"
+                                           <%= produto.status ? 'checked' : '' %> />
+                                    <span class="slider"></span>
+                                </label>
+                            </td>
+                            <td>
+                                <button id="editBtn" class="btn btn-success" style="margin-right: 5px;" onclick="openUpdateModal(<%= produto.id %>)">Editar</button>
+                                <button id="deleteBtn" class="btn btn-danger" onclick="deleteProduct(<%= produto.id %>)">Excluir</button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5" style="text-align: center;">Não há produtos cadastrados</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+
+         <nav>
+             <ul class="pagination">
+                 <% for(let i = 1; i <= totalPages; i++) { %>
+                     <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                         <a class="page-link" href="/pedidos?page=<%= i %>"><%= i %></a>
+                     </li>
+                 <% } %>
+             </ul>
+         </nav>
+      </div>
+
+      </main>
+      <!------------------
+         end main
+        ------------------->
+
+      <!----------------
+        start right main
+      ---------------------->
+      <div class="right">
+        <div class="top">
+          <button id="menu_bar">
+            <span class="material-symbols-sharp">menu</span>
+          </button>
+
+          <div class="theme-toggler">
+            <span class="material-symbols-sharp active">light_mode</span>
+            <span class="material-symbols-sharp">dark_mode</span>
+          </div>
+      </div>
+   </div>
+
+
+   <script src="/js/admin.js"></script>
+   <script src="/js/produtos.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+         function getQueryParam(param) {
+             const urlParams = new URLSearchParams(window.location.search);
+             return urlParams.get(param);
+         }
+
+         function removeQueryParams() {
+             const url = new URL(window.location.href);
+             url.search = '';
+             window.history.replaceState({}, document.title, url.toString());
+         }
+
+         function showMessageModal(success, message) {
+             Swal.fire({
+                 title: success === 'true' ? 'Sucesso!' : 'Erro!',
+                 text: message,
+                 icon: success === 'true' ? 'success' : 'error',
+                 showConfirmButton: false,
+                 timer: 3000,
+                 willClose: () => {
+                     removeQueryParams();
+                 }
+             });
+         }
+
+         const success = getQueryParam('success');
+         const message = getQueryParam('message');
+
+         if (message) {
+             showMessageModal(success, message);
+         }
+
+    </script>
+</body>
+</html>

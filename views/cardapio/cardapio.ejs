@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu de Hot Dogs</title>
+    <link rel="stylesheet" href="/css/cardapio/cardapio.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <img src="/images/hotdog.png" alt="Logo Hot Dog" class="logo">
+            <h1 id="H1" class="menu-title">Cardápio</h1>
+            <div class="nav-icons">
+                <a href="/home"><img src="/images/home.png" alt="home" class="icon"></a>
+                <a href=""><img src="/images/perfil.png" alt="login" class="icon"></a>
+                <a href=""><img src="/images/cart.png" alt="carrinho" class="icon"></a>
+            </div>
+        </nav>
+    </header>
+    <section class="section">
+        <h2>Hot Dog</h2>
+        <div class="menu-items">
+            <% produtos.forEach(produto=> { %>
+                <% if (produto.tipo==='LANCHE' ) { %>
+                    <div class="menu-item">
+                        <p>
+                            <%= produto.nome %>
+                        </p>
+                        <p>
+                            <%= produto.preco %>
+                        </p>
+                        <button>
+                            Adicionar
+                        </button>
+                    </div>
+                <% } %>
+            <% }) %>
+        </div>
+    </section>
+    <section class="section">
+        <h2>Hot Dog Doce</h2>
+        <div class="menu-items">
+            <% produtos.forEach(produto=> { %>
+                <% if (produto.tipo==='LANCHE-DOCE' ) { %>
+                    <div class="menu-item">
+                        <p>
+                            <%= produto.nome %>
+                        </p>
+                        <p>
+                            <%= produto.preco %>
+                        </p>
+                        <button>
+                            Adicionar
+                        </button>
+                    </div>
+                <% } %>
+            <% }) %>
+    </section>
+    <section class="section">
+        <h2>Bebidas</h2>
+        <% produtos.forEach(produto=> { %>
+            <% if (produto.tipo==='REFRI' ) { %>
+                <div class="menu-item">
+                    <p>
+                        <%= produto.nome %>
+                    </p>
+                    <p>
+                        <%= produto.preco %>
+                    </p>
+                    <button>
+                        Adicionar
+                    </button>
+                </div>
+            <% } %>
+        <% }) %>
+    </section>
+    <section class="section">
+        <h2>Adicionais</h2>
+        <% produtos.forEach(produto=> { %>
+            <% if (produto.tipo==='ADIC' ) { %>
+                <div class="menu-item">
+                    <p>
+                        <%= produto.nome %>
+                    </p>
+                    <p>
+                        <%= produto.preco %>
+                    </p>
+                    <button>
+                        Adicionar
+                    </button>
+                </div>
+            <% } %>
+        <% }) %>
+    </section>
+
+    <footer>
+        <img src="/images   /hotdog.png" alt="Logo Hot Dog" class="logo">
+        <br>
+        <img class="imagem-footer" src="/images/instagram.png" alt="instagram">
+        <img class="imagem-footer" src="/images/zapzap.png" alt="zapzap">
+        <img class="imagem-footer" src="/images/phone.png" alt="telefone">
+        <h3>Horário De Funcionamento</h3>
+        <p>Quarta á Segunda</p>
+        <p>19H00 A 22H00</p>
+    </footer>
+</body>
+</html>

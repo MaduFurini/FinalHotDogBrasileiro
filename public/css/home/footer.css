@@ -1,0 +1,106 @@
+:root {
+    --corFundo1: #700500;
+    --branco: #FFFFFF;
+    --preto: black;
+    --amarelo-gema: #EFCA48;
+}
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
+
+.card-foot {
+    width: 100%;
+    display: block;
+    justify-items: center;
+    height: 550px;
+}
+
+.logo-foot {
+    width: 30vh;
+    display: flex;
+}
+
+footer {
+    font-family: 'Dosis';
+    background-color: var(--corFundo1);
+    text-align: center;
+}
+
+.info-foot {
+    display: flex;
+    justify-content: center;
+
+    color: var(--branco);
+
+    font-weight: 1000;
+    font-size: 25px;
+    width: 500px;
+}
+
+.img-foot {
+    width: 65px;
+    border-radius: 30px;
+    justify-content: space-between;
+    display: inline;
+
+}
+
+.container-contato{
+    display: flex;
+    justify-content: space-between;
+    width: 25%;
+    margin-bottom: 10px;
+
+
+}
+:root {
+    --corFundo1: #700500;
+    --branco: #FFFFFF;
+    --preto: black;
+    --amarelo-gema: #EFCA48;
+}
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
+
+.card-foot {
+    width: 100%;
+    display: block;
+    justify-items: center;
+    height: 550px;
+}
+
+.logo-foot {
+    width: 30vh;
+    display: flex;
+}
+
+footer {
+    font-family: 'Dosis';
+    background-color: var(--corFundo1);
+    text-align: center;
+}
+
+.info-foot {
+    display: flex;
+    justify-content: center;
+
+    color: var(--branco);
+
+    font-weight: 1000;
+    font-size: 25px;
+    width: 500px;
+}
+
+.img-foot {
+    width: 65px;
+    border-radius: 30px;
+    justify-content: space-between;
+    display: inline;
+
+}
+
+.container-contato{
+    display: flex;
+    justify-content: space-between;
+    width: 25%;
+    margin-bottom: 10px;
+
+
+}

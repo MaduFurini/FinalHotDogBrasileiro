@@ -318,18 +318,27 @@ function deleteProduct(productId) {
     });
 }
 
-function renderProducts(products) {
+async function getCategoryNameById(id) {
+    const response = await fetch(`/categorias/${id}`);
+    const data = await response.json();
+    return data.nome;
+}
+
+async function renderProducts(products) {
     const productContainer = document.getElementById('productContainer');
     productContainer.innerHTML = '';
     if (products.length > 0) {
-        products.forEach(product => {
+        for (const product of products) {
             const row = document.createElement('tr');
+            const categoryName = await getCategoryNameById(product.id_categoria);
+
             row.innerHTML = `
                 <td>
                     <img src="${product.img}" alt="${product.nome}" class="product-image">
                 </td>
                 <td>${product.nome}</td>
                 <td>${product.descricao}</td>
+                <td>${categoryName}</td> 
                 <td>
                     <label class="switch">
                         <input type="checkbox" class="status-checkbox" data-id="${product.id}" ${product.status ? 'checked' : ''}>
@@ -342,7 +351,7 @@ function renderProducts(products) {
                 </td>
             `;
             productContainer.appendChild(row);
-        });
+        }
     } else {
         productContainer.innerHTML = `
             <tr>
@@ -351,7 +360,6 @@ function renderProducts(products) {
         `;
     }
 }
-
 function cleanFilter() {
     document.getElementById('searchInput').value = '';
 

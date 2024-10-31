@@ -33,7 +33,8 @@ const {
     updateStatusProdutos,
     updateProdutos,
     getProdutos,
-    destroyProdutos
+    destroyProdutos,
+    indexProdutosCardapio
 } = require('./controllers/produtoController');
 const {
     indexCategorias,
@@ -259,20 +260,6 @@ app.post('/clientes/create', async (req, res) => {
 
 // ===== ROTAS DE GERENCIAMENTO DE PRODUTOS =====
 app.get('/produtos', async(req, res) => {
-    const response = await indexProdutos(req);
-
-    console.log(response);
-    if (response.error) {
-        return res.status(500).json({ message: response.error });
-    }
-
-    res.render('admin/produtos', {
-        produtos: response.produtos,
-        currentPage: response.currentPage,
-        totalPages: response.totalPages
-    });
-});
-app.get('/produtos/cardapio', async(req, res) => {
     const response = await indexProdutos(req);
 
     console.log(response);
@@ -795,8 +782,9 @@ app.get('/login', (req, res) => {
     res.render('login/login')
 });
 
-app.get('/cardapio', (req, res) => {
-    res.render('cardapio/cardapio')
+app.get('/cardapio', async (req, res) => {
+    const response = await indexProdutosCardapio(req, res);
+
 });
 
 app.get('/home', (req, res) => {

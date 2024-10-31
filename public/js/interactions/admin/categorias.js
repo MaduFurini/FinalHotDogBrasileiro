@@ -272,7 +272,9 @@ function renderProducts(products) {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${product.nome}</td>
-                <td>${product.descricao}</td>
+                <td>
+                    ${product.descricao ? product.descricao : ''}
+                </td>
                 <td>
                     <label class="switch">
                         <input type="checkbox" class="status-checkbox" data-id="${product.id}" ${product.status ? 'checked' : ''}>

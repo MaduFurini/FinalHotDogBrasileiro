@@ -9,100 +9,58 @@
 <body>
     <header>
         <nav class="navbar">
-            <img src="/images/hotdog.png" alt="Logo Hot Dog" class="logo">
-            <h1 id="H1" class="menu-title">Cardápio</h1>
+            <div>
+                <img src="/images/logo.png" alt="Logo Hot Dog" class="logo">
+            </div>
+            <div>
+                <h1 id="H1" class="menu-title">Cardápio</h1>
+            </div>
             <div class="nav-icons">
                 <a href="/home"><img src="/images/home.png" alt="home" class="icon"></a>
-                <a href=""><img src="/images/perfil.png" alt="login" class="icon"></a>
-                <a href=""><img src="/images/cart.png" alt="carrinho" class="icon"></a>
+                <a href="#"><img src="/images/perfil.png" alt="login" class="icon"></a>
+                <a href="#"><img src="/images/cart.png" alt="carrinho" class="icon"></a>
             </div>
         </nav>
     </header>
-    <section class="section">
-        <h2>Hot Dog</h2>
-        <div class="menu-items">
-            <% produtos.forEach(produto=> { %>
-                <% if (produto.tipo==='LANCHE' ) { %>
-                    <div class="menu-item">
-                        <p>
-                            <%= produto.nome %>
-                        </p>
-                        <p>
-                            <%= produto.preco %>
-                        </p>
-                        <button>
-                            Adicionar
-                        </button>
-                    </div>
-                <% } %>
-            <% }) %>
-        </div>
-    </section>
-    <section class="section">
-        <h2>Hot Dog Doce</h2>
-        <div class="menu-items">
-            <% produtos.forEach(produto=> { %>
-                <% if (produto.tipo==='LANCHE-DOCE' ) { %>
-                    <div class="menu-item">
-                        <p>
-                            <%= produto.nome %>
-                        </p>
-                        <p>
-                            <%= produto.preco %>
-                        </p>
-                        <button>
-                            Adicionar
-                        </button>
-                    </div>
-                <% } %>
-            <% }) %>
-    </section>
-    <section class="section">
-        <h2>Bebidas</h2>
-        <% produtos.forEach(produto=> { %>
-            <% if (produto.tipo==='REFRI' ) { %>
-                <div class="menu-item">
-                    <p>
-                        <%= produto.nome %>
-                    </p>
-                    <p>
-                        <%= produto.preco %>
-                    </p>
-                    <button>
-                        Adicionar
-                    </button>
+
+    <% categorias.forEach(categoria => { %>
+        <% if (produtosPorCategoria[categoria.id]) { %>
+            <section class="section">
+                <div class="title-container">
+                    <hr class="hr-top">
+                    <hr class="hr-bottom">
+                    <h2><%= categoria.nome %></h2>
                 </div>
-            <% } %>
-        <% }) %>
-    </section>
-    <section class="section">
-        <h2>Adicionais</h2>
-        <% produtos.forEach(produto=> { %>
-            <% if (produto.tipo==='ADIC' ) { %>
-                <div class="menu-item">
-                    <p>
-                        <%= produto.nome %>
-                    </p>
-                    <p>
-                        <%= produto.preco %>
-                    </p>
-                    <button>
-                        Adicionar
-                    </button>
+                <div class="menu-items">
+                    <% produtosPorCategoria[categoria.id].forEach(produto => { %>
+                        <div class="menu-item">
+                            <img src="<%= produto.img ? produto.img : 'images/produtos/default.webp' %>" alt="<%= produto.nome %>" />
+                            <p class="nome"><%= produto.nome %></p>
+                        <% if (produto.descricao) { %>
+                            <p class="descricao"><%= produto.descricao %></p>
+                        <% } else { %>
+                            <p class="descricao" style="visibility: hidden;">&nbsp;</p>
+                        <% } %>
+                            <p>R$ <%= produto.preco.toFixed(2) %></p>
+
+                            <button>Adicionar</button>
+                        </div>
+                    <% }) %>
                 </div>
-            <% } %>
-        <% }) %>
-    </section>
+            </section>
+        <% } %>
+    <% }) %>
 
     <footer>
-        <img src="/images   /hotdog.png" alt="Logo Hot Dog" class="logo">
-        <br>
-        <img class="imagem-footer" src="/images/instagram.png" alt="instagram">
-        <img class="imagem-footer" src="/images/zapzap.png" alt="zapzap">
-        <img class="imagem-footer" src="/images/phone.png" alt="telefone">
+        <img src="/images/hotdog.png" alt="Logo Hot Dog" class="logo">
+        <div>
+            <img class="imagem-footer" src="/images/instagram.png" alt="instagram">
+            <img class="imagem-footer" src="/images/zapzap.png" alt="zapzap">
+            <img class="imagem-footer" src="/images/phone.png" alt="telefone">
+        </div>
         <h3>Horário De Funcionamento</h3>
-        <p>Quarta á Segunda</p>
-        <p>19H00 A 22H00</p>
+        <p>Quarta à Segunda</p>
+        <p>19H00 às 22H00</p>
     </footer>
 </body>
 </html>

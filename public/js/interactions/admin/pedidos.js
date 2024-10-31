@@ -213,13 +213,13 @@ function renderProducts(products) {
             row.innerHTML = `
                 <td>${product.codigo}</td>
                 <td>${product.observacao}</td>
-                <td>${product.valorTotal}</td>
+                <td>R$${product.valorTotal}</td>
                 <td>${product.status}</td>
                 <td style="position: relative;">
                   <span
                     class="material-symbols-sharp info-icon"
                     style="color: blue; cursor: pointer;"
-                    data-id="<%= product.id %>"
+                    data-id="${product.id}"
                     onmouseover="buscarProdutos(this)"
                     onmouseout="esconderTooltip(this)">
                     info

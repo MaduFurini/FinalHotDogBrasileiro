@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const fs = require('fs');
 const path = require("path");
+const { Op } = require('sequelize');
 
 const Categoria = require("../models/categoria");
 const Produto = require('../models/produto');
@@ -57,41 +58,36 @@ const indexProdutos = async (req) => {
     }
 };
 
-const indexProdutosCardapio = async (req) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 5;
-    const offset = (page - 1) * limit;
-
+const indexProdutosCardapio = async (req, res) => {
     try {
-        const { count, rows: produtos } = await Produto.findAndCountAll({
-            limit: limit,
-            offset: offset
+        const produtos = await Produto.findAll({
+            where: { status: 1 },
         });
 
-        const categoriaIds = produtos.map(produto => produto.id_categoria);
+        const categoriaIds = [...new Set(produtos.map(p => p.id_categoria))];
 
         const categorias = await Categoria.findAll({
             where: {
-                id: categoriaIds
-            }
+                id: { [Op.in]: categoriaIds },
+            },
         });
 
-        const categoriaMap = {};
-        categorias.forEach(categoria => {
-            categoriaMap[categoria.id] = categoria.nome;
-        });
+        const produtosPorCategoria = categorias.reduce((map, categoria) => {
+            map[categoria.id] = produtos.filter(
+                produto => produto.id_categoria === categoria.id
+            );
+            return map;
+        }, {});
 
-        const produtosComCategoria = produtos.map(produto => ({
-            ...produto.dataValues,
-            categoria: categoriaMap[produto.id_categoria] || 'Categoria não encontrada'
-        }));
 
-        const totalPages = Math.ceil(count / limit);
-
-        return { produtos: produtosComCategoria, currentPage: page, totalPages };
+        res.render('cardapio/cardapio', { categorias, produtosPorCategoria });
     } catch (error) {
         console.error("Erro ao listar produtos:", error);
-        return { error: "Erro ao listar produtos" };
+        res.status(500).render('cardapio/cardapio', {
+            categorias: [],
+            produtosPorCategoria: {},
+            error: "Erro ao listar produtos."
+        });
     }
 };
 
@@ -228,4 +224,4 @@ const destroyProdutos = async (req) => {
 };
 
 
-module.exports = { upload, indexProdutos, storeProdutos, updateStatusProdutos, updateProdutos, getProdutos, destroyProdutos };
+module.exports = { upload, indexProdutos, storeProdutos, updateStatusProdutos, updateProdutos, getProdutos, destroyProdutos, indexProdutosCardapio };

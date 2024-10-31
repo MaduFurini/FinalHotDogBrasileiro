@@ -91,7 +91,9 @@
                     <% categorias.forEach(categoria => { %>
                         <tr>
                             <td><%= categoria.nome %></td>
-                            <td><%= categoria.descricao %></td>
+                            <td>
+                                <%= categoria.descricao ? categoria.descricao : '' %>
+                            </td>
                             <td>
                                 <label class="switch">
                                     <input type="checkbox"

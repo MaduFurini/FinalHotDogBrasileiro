@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Hot Dog Brasileiro | Home</title>
+      <link rel="shortcut icon" href="/images/logo.png">
+
     <link rel="stylesheet" href="css/home/home.css">
     <link rel="stylesheet" href="css/home/footer.css">
 
@@ -12,145 +14,117 @@
 </head>
 
 <body>
-    <div id="cabecalho">
-        <img src="images/logo.jpg" alt="Logo hot-dog Brasileiro" id="logoHeader">
-        <h3 class="container-texto"><a href="/cardapio">CARDAPIO</a>
-            SOBRE
-            <a href="/login">LOGIN</a>
+    <header>
+        <nav>
+            <img src="images/logo.png" alt="Logo Hot Dog Brasileiro">
 
-        </h3>
-    </div>
+            <div class="nav-links">
+                <a href="/cardapio">CARDAPIO</a>
+                <a href="#">SOBRE</a>
+                <a href="/login">Cadastre-se</a>
+            </div>
+        </nav>
 
-    <div class="container-titulo">
-        <div id="container-texto1">
-            <h1 id="texto-titulo">OS MELHORES HOT DOGS
-                DA CIDADE</h1>
-            <p id="texto-subtitulo">Venha experimentar nossos deliciosos lanches, feitos com os melhores ingredientes
-            </p>
-            <a href="/login"><button id="botao-pedir">Peça agora!</button></a>
+        <div class="header-container">
+            <div class="header-container-title">
+                <h1>OS MELHORES HOT DOGS DA CIDADE</h1>
+                <p>Venha experimentar nossos deliciosos lanches, feitos com os melhores ingredientes</p>
+
+                <a href="/login">Peça agora!</a>
+            </div>
+
+            <div class="header-container-image">
+                 <img src="images/produtos/default.webp" alt="">
+            <div>
         </div>
+    </header>
 
-        <img id="imagem-titulo" src="images/mudar dps.jpeg" alt="CARDAPIO">
+    <!-- HTML DINAMICO - CATEGORIA COMBO -->
+    <section class="combo-container">
+        <h1>APROVEITE NOSSAS OFERTAS!</h1>
 
-    </div>
+        <div class="combo-card-container">
+            <div class="combo-card">
+                <div class="combo-card-image">
+                    <img src="images/produtos/default.webp" alt="">
+                </div>
 
+                <h4>Nome do combo</h4>
 
-    <div>
-        <h1 id="titulo-combos">APROVEITE NOSSAS OFERTAS!</h1>
-    </div>
-    <div id="card-combos">
-        <div class="card-combo1">
-            <div id="container-imagem">
-                <img class="imgcm" src="images/mudar dps.jpeg" alt="">
+                <div class="combo-card-info">
+                    <p class="info">Produto I</p>
+                    <p class="info">Produto II</p>
+                    <p class="info">Produto III</p>
+
+                    <p class="preco">R$20,00</p>
+
+                    <a href="">Peça agora!</a>
+                </div>
             </div>
-
-
-            <h4 class="texto-titulo-combo">Combo individual</h4>
-
-            <div class="informacoes-combo">
-                1 Hot dog Tradicional II <br>
-                + 1 refrigente lata e <br>
-                + 1 trento <br><br>
-            </div>
-            <p class="card-preco">
-                R$25,00 <a href="/cardapio"><BUTTON class="btn-combo">Peça agora!</BUTTON></a>
-            </p>
-
         </div>
-        <div class="card-combo1">
-            <div id="container-imagem">
-                <img class="imgcm" src="images/mudar dps.jpeg" alt="">
-            </div>
-            <h4 class="texto-titulo-combo">Combo Casal</h4>
-            <div class="informacoes-combo">
-                2 Hot dogs Tradicionais <br>
-                + 1 Guaraná Antartica - litro <br>
-                + 1 trento <br><br>
-            </div>
+    </section>
 
-            <p class="card-preco">
-                R$40,00
-                <a href="/cardapio"><BUTTON class="btn-combo">Peça agora!</BUTTON></a>
-            </p>
-        </div>
-    </div>
-
-
-
-    <div id="card-cardapio">
+    <section class="cardapio-container">
         <h1>CONHEÇA NOSSO CARDÁPIO</h1>
         <p>Temos opções para todos os gostos!</p>
 
-        <a href="/cardapio"><button id="btn-cardapio">Ver cardápio</button></a>
-    </div>
+        <a href="/cardapio">Ver cardápio</a>
+    </section>
 
+    <section class="sobre-container" id="sobre-container">
+        <h1>SOBRE NÓS</h1>
 
-    <div id="container-sobre">
-        <div class="sobre-img">
-            <h1 id="sobre-titulo">Sobre nós</h1>
-            <img src="images/mudar dps.jpeg" alt="" class="sobre-img">
+        <div class="sobre-container-conteudo">
+            <div class="sobre-image">
+                <img src="images/produtos/default.webp" alt="">
+            </div>
+
+            <div class="sobre-descricao">
+                <p>
+                    Surgida de uma ideia que se transformou em realidade, a Hot Dog Brasileiro foi inaugurada em 09 de setembro de 2022, data em que se celebra o Dia Nacional do Hot Dog.
+                    <br><br>
+                    Com um olhar voltado para inovação, nossa equipe buscou sair do convencional. Em vez de servir o clássico hot dog, trouxemos para Mococa uma nova experiência: o Hot Dog Selado.
+                    <br><br>
+                    A equipe da Hot Dog Brasileiro dedicou-se a criar uma experiência de sabor única e diferenciada para nossos clientes, combinando a técnica do hot dog selado com ingredientes de alta qualidade. Todos os nossos hot dogs são preparados na hora, garantindo que nossos clientes desfrutem de uma experiência excepcional, desde o pão fresco até a embalagem cuidadosamente lacrada.
+                    <br><br>
+                    Em nosso espaço, cada detalhe é preparado com rigorosas práticas de higiene e enviado com qualidade, carinho e dedicação para o conforto da sua casa.
+                </p>
+            </div>
         </div>
-        <div class="sobre-descricao">
-            <p> Surgindo de uma ideia e se transformando em realidade, a Hot Dog Brasileiro foi inaugurada
-                no dia 09 de setembro de 2022, dia nacional do hot dog. <br>
+    </section>
 
-                Visando a mudança e a inovação, nossa equipe buscou pensar fora da caixinha. Ao invés de servir
-                aquele
-                hot
-                dog clássico, trouxemos para Mococa o Hot Dog selado! <br><br>
-                A equipe Hot Dog Brasileiro dedicou-se a criar uma experiência de sabor único e concentrado para
-                nossos
-                clientes, combinando a técnica do hot dog selado com ingredientes de alta qualidade. Todos os nossos
-                hot
-                dogs são preparados na hora para garantir que nossos clientes tenham a melhor experiência possível,
-                desde o
-                pão fresco, até mesmo a embalagem lacrada. <br><br>
+    <section class="avaliacao-container">
+        <h1>AVALIAÇÕES</h1>
 
-                Tudo no nosso cantinho é preparado com higiene de alta performance e enviado com muita qualidade,
-                amor e
-                carinho até conforto de sua casa!</p>
+        <div class="avaliacao-container-cards">
+            <div class="avaliacao-container-cards-card">
+                <img src="images/produtos/default.webp" alt="">
+
+                <p>Usuário</p>
+                <p>Muito bom!</p>
+            </div>
         </div>
-    </div>
+    </section>
 
+    <footer>
+        <img src="images/logo.png" alt="">
 
-    <h1 id="titulo-avaliacao">AVALIAÇÕES DE NOSSOS CLIENTES</h1>
-
-    <div id="cliente-avaliacao">
-
-        <div class="cliente-comentario">
-            <img src="images/icon_pessoa.png" alt="" class="img-cliente"><br>
-        </div>
-
-        <div class="cliente-comentario">
-            <img src="images/icon_pessoa.png" alt="" class="img-cliente"><br><br><br><br><br>
-        </div>
-
-        <div class="cliente-comentario">
-            <img src="images/icon_pessoa.png" alt="" class="img-cliente">
-        </div>
-    </div>
-
-    <footer class="card-foot">
-        <img src="images/logo.jpg" alt="" class="logo-foot">
-
-        <div class="container-contato">
-            <img class="img-foot" src="images/icone whats.png" alt="Whatsapp">
-            <img class="img-foot" src="images/instagram-black-logo-on-transparent-background-free-vector.jpg"
-                alt="Instagram">
-            <img class="img-foot"
-                src="images/2261151-phone-icon-symbol-sign-isolate-on-white-background-vector-illustration-grátis-vetor.jpg">
+        <div class="footer-info-img">
+            <img src="images/produtos/default.webp" alt="Whatsapp">
+            <img src="images/produtos/default.webp" alt="Whatsapp">
+            <img src="images/produtos/default.webp" alt="Whatsapp">
         </div>
 
-        <div class="info-foot">
+        <div class="footer-info-content">
+            <p>HORÁRIO DE FUNCIONAMENTO</p>
+            <p>QUARTA À SEGUNDA</p>
+            <p>19H00 A 22H00</p>
 
-            <h2">HORÁRIO DE FUNCIONAMENTO</h2><br><br>
-                QUARTA À SEGUNDA <br>
-                19H00 A 22H00 <br><br>
-
-                R.Dr.Abrão Venturi Filho, 60, Mococa
-
-        </div>
+            <br>
+            <p>R.Dr.Abrão Venturi Filho, 60, Mococa</p>
         </div>
     </footer>
+
+   <script src="/js/interactions/home/home.js"></script>
 </body>
 </html>

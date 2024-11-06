@@ -21,7 +21,7 @@
             <div class="nav-links">
                 <a href="/cardapio">CARDAPIO</a>
                 <a href="#">SOBRE</a>
-                <a href="/login">Cadastre-se</a>
+                <a href="/login" id="loginBtn">Cadastre-se</a>
             </div>
         </nav>
 
@@ -126,5 +126,26 @@
     </footer>
 
    <script src="/js/interactions/home/home.js"></script>
+   <script>
+     document.addEventListener("DOMContentLoaded", function() {
+       // Verifica se o usuário existe
+       <% if (user) { %>
+         const userType = '<%= user.tipo_usuario %>';  // Acessando o tipo de usuário do objeto user
+
+         const cadastroButton = document.querySelector("a[href='/login']");
+
+         // Verificação do tipo de usuário
+         if (userType === 'admin') {
+           cadastroButton.textContent = 'Painel de Controle';
+         } else if (userType === 'cliente') {
+           cadastroButton.style.display = 'none';  // Esconde o botão para clientes
+         }
+       <% } else { %>
+         const cadastroButton = document.querySelector("a[href='/login']");
+         cadastroButton.textContent = 'Cadastre-se';  // Exibe o texto 'Cadastre-se' se não houver usuário logado
+       <% } %>
+     });
+   </script>
+
 </body>
 </html>

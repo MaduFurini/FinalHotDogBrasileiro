@@ -76,6 +76,9 @@ app.post('/login', async (req, res) => {
             return res.status(404).json({ message: 'Usuário não encontrado' });
         }
 
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(senha, salt);
+
         const senhaValida = await bcrypt.compare(senha, user.senha);
 
         if (!senhaValida) {
@@ -101,7 +104,7 @@ app.post('/login', async (req, res) => {
             expires_at: expiresAt
         });
 
-        return res.redirect(`/home?userId=${user.id}&token=${token}`);
+        return res.redirect(`/home?user=${user}&token=${token}`);
 
     } catch (error) {
         console.error('Erro ao autenticar usuário:', error);
@@ -180,7 +183,7 @@ app.post('/newPassword', async (req, res) => {
                 expiresIn: '1h'
             });
 
-            return res.redirect('/home');
+            return res.redirect('/login');
         }
 
         return res.status(404).json({ message: 'Usuário não encontrado' });
@@ -788,7 +791,9 @@ app.get('/cardapio', async (req, res) => {
 });
 
 app.get('/home', (req, res) => {
-    res.render('home/home')
+    const user = req.user || null;
+
+    res.render('home/home', { user });
 });
 
 

@@ -32,7 +32,7 @@ nav {
 }
 
 nav.fixed {
-    height: 10%;
+    height: 5%;
     position: fixed;
     top: 0;
     left: 0;
@@ -41,7 +41,7 @@ nav.fixed {
 }
 
 nav.fixed img{
-    width: 85px;
+    width: 65px;
 }
 
 nav img {
@@ -151,7 +151,7 @@ header .header-container .header-container-image img {
 }
 
 .combo-card {
-    width: 500px;
+    width: 400px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -212,13 +212,13 @@ header .header-container .header-container-image img {
 .cardapio-container {
     width: 100vw;
     background-color: var(--red);
-    padding: 5% 0;
+    padding: 3vh 0;
     text-align: center;
     color: white;
 }
 
 .cardapio-container p {
-   margin-bottom: 5%;
+    margin-bottom: 3%;
     font-size: 1.1rem;
 }
 
@@ -272,9 +272,8 @@ header .header-container .header-container-image img {
 .avaliacao-container {
     width: 100vw;
     background-color: var(--amarelo-gema);
-    padding: 5% 0;
+    padding: 3vh 0;
     text-align: center;
-    margin-bottom: 20%;
 }
 
 .avaliacao-container h1 {
@@ -298,6 +297,7 @@ header .header-container .header-container-image img {
     width: 250px;
     text-align: center;
     transition: transform 0.3s;
+    margin-bottom: 20px;
 }
 
 .avaliacao-container-cards-card:hover {
@@ -317,22 +317,26 @@ header .header-container .header-container-image img {
 }
 
 footer {
-    background-color: var(--red);
+    background-color: var(--red); !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     color: white;
     width: 100%;
+    text-align: center;
+    bottom: 0;
+    height: auto;
+    padding-bottom: 10px;
 }
 
 footer img {
-    margin: 3% 0;
-    width: 15%;
+    margin: 1vw 0;
+    width: 7vh;
 }
 
 footer .footer-info-img img {
-    width: 5%;
+    width: 3vh !important;
     margin: 0 !important;
     border-radius: 360px;
 }

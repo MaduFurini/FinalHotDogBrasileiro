@@ -23,8 +23,11 @@
         </nav>
     </header>
 
+    <% let produtosEncontrados = 0; %>
+
     <% categorias.forEach(categoria => { %>
-        <% if (produtosPorCategoria[categoria.id]) { %>
+        <% if (produtosPorCategoria[categoria.id] && produtosPorCategoria[categoria.id].length > 0) { %>
+            <% produtosEncontrados++; %> <!-- Incrementa a contagem de produtos encontrados -->
             <section class="section">
                 <div class="title-container">
                     <hr class="hr-top">
@@ -36,13 +39,12 @@
                         <div class="menu-item">
                             <img src="<%= produto.img ? produto.img : 'images/produtos/default.webp' %>" alt="<%= produto.nome %>" />
                             <p class="nome"><%= produto.nome %></p>
-                        <% if (produto.descricao) { %>
-                            <p class="descricao"><%= produto.descricao %></p>
-                        <% } else { %>
-                            <p class="descricao" style="visibility: hidden;">&nbsp;</p>
-                        <% } %>
+                            <% if (produto.descricao) { %>
+                                <p class="descricao"><%= produto.descricao %></p>
+                            <% } else { %>
+                                <p class="descricao" style="visibility: hidden;">&nbsp;</p>
+                            <% } %>
                             <p>R$ <%= produto.preco.toFixed(2) %></p>
-
                             <button>Adicionar</button>
                         </div>
                     <% }) %>
@@ -51,16 +53,31 @@
         <% } %>
     <% }) %>
 
-    <footer>
-        <img src="/images/logo.png" alt="Logo Hot Dog" class="logo">
-        <div>
-            <img class="imagem-footer" src="/images/produtos/default.webp" alt="instagram">
-            <img class="imagem-footer" src="/images/produtos/default.webp" alt="zapzap">
-            <img class="imagem-footer" src="/images/produtos/default.webp" alt="telefone">
+    <% if (produtosEncontrados === 0) { %>
+        <div class="no-products">
+            <img src="images/noProduct.png" alt="Nenhum produto encontrado" />
+            <p>Ops! Houve um erro ao buscar produtos. Tente novamente mais tarde</p>
         </div>
-        <h3>Horário De Funcionamento</h3>
-        <p>Quarta à Segunda</p>
-        <p>19H00 às 22H00</p>
+    <% } %>
+
+
+     <footer>
+        <img src="images/logo.png" alt="">
+
+        <div class="footer-info-img">
+            <img src="images/produtos/default.webp" alt="Whatsapp">
+            <img src="images/produtos/default.webp" alt="Whatsapp">
+            <img src="images/produtos/default.webp" alt="Whatsapp">
+        </div>
+
+        <div class="footer-info-content">
+            <p>HORÁRIO DE FUNCIONAMENTO</p>
+            <p>QUARTA À SEGUNDA</p>
+            <p>19H00 A 22H00</p>
+
+            <br>
+            <p>R.Dr.Abrão Venturi Filho, 60, Mococa</p>
+        </div>
     </footer>
 </body>
 </html>

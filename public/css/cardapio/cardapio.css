@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
 
+:root {
+    --red: #800000;
+    --branco: #FFFFFF;
+    --preto: black;
+    --amarelo-gema: #EFCA48;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -93,19 +100,8 @@ header {
     width: 30px;
 }
 
-.foot-icons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    padding: 20px 0;
-}
-
-.foot-icons .icon {
-    width: 30px;
-    height: 30px;
-}
-
 .section {
+    display: flex;
     margin: 20px auto;
     max-width: 1200px;
     padding: 20px;
@@ -116,6 +112,25 @@ header {
     text-align: center;
     margin-bottom: 20px;
     font-size: 52px;
+}
+
+.no-products {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 50vh;
+    margin: 0;
+}
+
+.no-products img {
+    width: 150px;
+    margin-bottom: 10px;
+}
+
+.no-products p {
+    font-size: 1.2em;
+    color: #555;
 }
 
 .menu-items {
@@ -183,15 +198,29 @@ header {
 }
 
 footer {
-    background-color: #800000;
+    background-color: var(--red); !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     color: white;
+    width: 100%;
     text-align: center;
-    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    height: auto;
+    padding-bottom: 10px;
 }
 
-.imagem-footer {
-    width: 50px;
-    padding: 10px;
+footer img {
+    margin: 1vw 0;
+    width: 7vh;
+}
+
+footer .footer-info-img img {
+    width: 3vh !important;
+    margin: 0 !important;
+    border-radius: 360px;
 }
 
 /* Estilos responsivos */

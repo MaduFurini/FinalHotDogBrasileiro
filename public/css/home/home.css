@@ -1,0 +1,338 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
+
+:root {
+    --red: #800000;
+    --branco: #FFFFFF;
+    --preto: black;
+    --amarelo-gema: #EFCA48;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 101vw;
+    font-family: 'Dosis', serif;
+    overflow-x: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+nav {
+    width: 100%;
+    background-color: var(--red);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2%;
+    position: relative;
+    top: 0;
+    transition: top 0.3s ease, padding 0.3s ease;
+}
+
+nav.fixed {
+    height: 10%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    padding: 2%;
+}
+
+nav.fixed img{
+    width: 85px;
+}
+
+nav img {
+    width: 10%;
+}
+
+nav .nav-links {
+    margin-right: 40px;
+    width: 70%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+nav .nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 24px;
+    margin: 0 5%;
+}
+
+nav .nav-links a:last-child {
+    background-color: var(--amarelo-gema);
+    padding: 10px 15px;
+    color: var(--red);
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+nav .nav-links a:hover {
+    transform: scale(1.1);
+    transition: 0.5s;
+}
+
+header .header-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--red);
+    padding: 0 0 5% 0;
+}
+
+header .header-container .header-container-title {
+    width: 45%;
+    color: white;
+    margin: 0 5%;
+}
+
+header .header-container .header-container-title h1 {
+    font-size: 48px;
+    margin: 0;
+}
+
+header .header-container .header-container-title p {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+header .header-container .header-container-title a {
+    text-decoration: none;
+    padding: 15px 20px;
+    background-color: var(--amarelo-gema);
+    color: var(--red);
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+header .header-container .header-container-title a:hover {
+    transition: 0.5s;
+    transform: scale(1.1);
+}
+
+header .header-container .header-container-image {
+    width: 45%;
+    display: flex;
+    justify-content: center;
+    margin-right: 5%;
+}
+
+header .header-container .header-container-image img {
+    width: 100%;
+    height: auto;
+}
+
+.combo-container {
+    text-align: center;
+    padding: 20px 0 5% 0;
+    background-color: #f4f4f4;
+}
+
+.combo-container h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.combo-card-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.combo-card {
+    width: 500px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.combo-card:hover {
+    transform: scale(1.05);
+}
+
+.combo-card-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.combo-card h4 {
+    font-size: 2.3rem;
+    color: #333;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.combo-card-info {
+    padding: 15px;
+}
+
+.combo-card-info .info {
+    font-size: 1rem;
+    color: #666;
+    margin: 5px 0;
+}
+
+.combo-card-info .preco {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.combo-card-info a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: var(--red);
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.combo-card-info a:hover {
+    transform: scale(1.1);
+    transition: 0.5s;
+}
+
+.cardapio-container {
+    width: 100vw;
+    background-color: var(--red);
+    padding: 5% 0;
+    text-align: center;
+    color: white;
+}
+
+.cardapio-container p {
+   margin-bottom: 5%;
+    font-size: 1.1rem;
+}
+
+.cardapio-container a {
+    padding: 10px 15px;
+    text-decoration: none;
+    color: var(--red);
+    background-color: var(--amarelo-gema);
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.cardapio-container a:hover {
+    transform: scale(1.1);
+    transition: 0.5s;
+}
+
+.sobre-container {
+    display: flex;
+    flex-direction: column;
+    padding: 40px 20px;
+    background-color: #f4f4f4;
+    gap: 20px;
+}
+
+.sobre-container h1 {
+    font-size: 2.3rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.sobre-container-conteudo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5%;
+}
+
+.sobre-container-conteudo div {
+    width: 50%;
+}
+
+.sobre-container-conteudo .sobre-image img {
+    width: 80%;
+}
+
+.sobre-container-conteudo .sobre-descricao p {
+    font-size: 1.3rem;
+}
+
+.avaliacao-container {
+    width: 100vw;
+    background-color: var(--amarelo-gema);
+    padding: 5% 0;
+    text-align: center;
+    margin-bottom: 20%;
+}
+
+.avaliacao-container h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.avaliacao-container-cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.avaliacao-container-cards-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 250px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.avaliacao-container-cards-card:hover {
+    transform: translateY(-5px);
+}
+
+.avaliacao-container-cards-card img {
+    width: 50px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.avaliacao-container-cards-card p {
+    font-size: 1rem;
+    color: #555;
+    margin: 5px 0;
+}
+
+footer {
+    background-color: var(--red);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    width: 100%;
+}
+
+footer img {
+    margin: 3% 0;
+    width: 15%;
+}
+
+footer .footer-info-img img {
+    width: 5%;
+    margin: 0 !important;
+    border-radius: 360px;
+}

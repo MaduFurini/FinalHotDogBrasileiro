@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu de Hot Dogs</title>
+    <link rel="stylesheet" href="/css/cardapio/cardapio.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div>
+                <img src="/images/logo.png" alt="Logo Hot Dog" class="logo">
+            </div>
+            <div>
+                <h1 id="H1" class="menu-title">Cardápio</h1>
+            </div>
+            <div class="nav-icons">
+                <a href="/home"><img src="/images/produtos/default.webp" alt="home" class="icon"></a>
+                <a href="#"><img src="/images/produtos/default.webp" alt="login" class="icon"></a>
+                <a href="#"><img src="/images/produtos/default.webp" alt="carrinho" class="icon"></a>
+            </div>
+        </nav>
+    </header>
+
+    <% categorias.forEach(categoria => { %>
+        <% if (produtosPorCategoria[categoria.id]) { %>
+            <section class="section">
+                <div class="title-container">
+                    <hr class="hr-top">
+                    <hr class="hr-bottom">
+                    <h2><%= categoria.nome %></h2>
+                </div>
+                <div class="menu-items">
+                    <% produtosPorCategoria[categoria.id].forEach(produto => { %>
+                        <div class="menu-item">
+                            <img src="<%= produto.img ? produto.img : 'images/produtos/default.webp' %>" alt="<%= produto.nome %>" />
+                            <p class="nome"><%= produto.nome %></p>
+                        <% if (produto.descricao) { %>
+                            <p class="descricao"><%= produto.descricao %></p>
+                        <% } else { %>
+                            <p class="descricao" style="visibility: hidden;">&nbsp;</p>
+                        <% } %>
+                            <p>R$ <%= produto.preco.toFixed(2) %></p>
+
+                            <button>Adicionar</button>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+        <% } %>
+    <% }) %>
+
+    <footer>
+        <img src="/images/logo.png" alt="Logo Hot Dog" class="logo">
+        <div>
+            <img class="imagem-footer" src="/images/produtos/default.webp" alt="instagram">
+            <img class="imagem-footer" src="/images/produtos/default.webp" alt="zapzap">
+            <img class="imagem-footer" src="/images/produtos/default.webp" alt="telefone">
+        </div>
+        <h3>Horário De Funcionamento</h3>
+        <p>Quarta à Segunda</p>
+        <p>19H00 às 22H00</p>
+    </footer>
+</body>
+</html>

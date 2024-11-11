@@ -84,10 +84,4 @@ const verifyUserAbility = async (req, res, next) => {
     }
 };
 
-const logout = (req, res) => {
-    res.clearCookie('token', { httpOnly: true });
-
-    res.redirect('/login');
-};
-
-module.exports = { authMiddleware, verifyUserAbility, logout };
+module.exports = { authMiddleware, verifyUserAbility };

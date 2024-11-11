@@ -132,18 +132,25 @@
 
     document.addEventListener("DOMContentLoaded", function() {
         const idUser = userData.id;
-        let userTipo = userData.tipo_usuario;
+        const userTipo = userData.tipo_usuario;
 
         const cadastroButton = document.getElementById("loginBtn");
 
-userTipo = 'admin'
         if (idUser && userTipo) {
             if (userTipo === 'admin') {
                 cadastroButton.textContent = 'Painel de Controle';
-                cadastroButton.href = '/pedidos'
+                cadastroButton.href = '/pedidos';
             } else if (userTipo === 'cliente') {
-                cadastroButton.textContent = 'Pedidos';
-                cadastroButton.href = '/pedidos/cliente'
+                const nav = document.querySelector('.nav-links');
+
+                const pedidoButton = document.createElement('a');
+                pedidoButton.textContent = 'PEDIDOS';
+                pedidoButton.href = '/pedidos/cliente';
+
+                cadastroButton.textContent = 'Sair';
+                cadastroButton.href = '/sair';
+
+                nav.insertBefore(pedidoButton, cadastroButton);
             }
         } else {
             cadastroButton.textContent = 'Cadastre-se';

@@ -75,8 +75,7 @@ const Funcionario = require("./models/usuario");
 // INSTÂNCIA DE MIDDLEWARE
 const {
     authMiddleware,
-    verifyUserAbility,
-    logout
+    verifyUserAbility
 } = require('./middleware/authMiddleware')
 
 
@@ -768,9 +767,10 @@ app.delete('/pedidos/delete/:id' , authMiddleware, verifyUserAbility,async (req,
 
 // ===== ROTAS DE RENDERIZAÇÃO =====
 app.get('/sair', (req, res) => {
-    logout();
+    res.clearCookie('token', { httpOnly: true });
+    const user = null;
 
-    res.render('home/home');
+    res.render('home/home', { user: user });
 });
 
 app.get('/pedidos', (req, res) => {

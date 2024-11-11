@@ -1,6 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
+
 body{
     background-color: #ecf0f1 !important;
     overflow: hidden;
+}
+
+* {
+    font-family: 'Dosis', serif !important;
 }
 
 .container {
@@ -35,7 +41,6 @@ body{
 .title {
     font-size: 28px;
     font-weight: bold;
-    text-transform: capitalize;
 }
 .title-primary {
     color: #fff;
@@ -93,6 +98,13 @@ body{
     transform: scale(1.1);
     transition: 0.5s;
 }
+.btn-back {
+    margin-top: 5%;
+}
+.btn-back:hover {
+    transform: scale(1.1);
+    transition: 0.5s;
+}
 .first-content {
     display: flex;
 }
@@ -103,6 +115,10 @@ body{
     text-align: center;
     width: 40%;
     z-index: 10;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 .first-column img {
     width: 30%;
@@ -187,9 +203,7 @@ input:-webkit-autofill
     margin: 15px 0;
     text-align: center;
 }
-.password::first-letter {
-    text-transform: capitalize;
-}
+
 
 
 
@@ -234,293 +248,83 @@ input:-webkit-autofill
     z-index: 13;
 }
 
-
-/* DESLOCAMENTO CONTEÚDO ATRÁS DO CONTENT:BEFORE*/
-.sign-in-js .first-content .second-column {
-
-    z-index: -1;
-    position: relative;
-    animation: deslocamentoEsq 1.3s; /*MODIFIQUEI DE 3s PARA 1.3s*/
-}
-
-.sign-up-js .second-content .second-column {
-    position: relative;
-    z-index: -1;
-    animation: deslocamentoDir 1.3s; /*MODIFIQUEI DE 3s PARA 1.3s*/
-}
-
-/*ANIMAÇÃOO CSS PARA O CONTEÚDO*/
-
-@keyframes deslocamentoEsq {
-
-    from {
-        left: 0;
-        opacity: 1;
-        z-index: 12;
+@media (max-width: 768px) {
+    body {
+        display: flex;
+        justify-content: center;
     }
 
-    25% {
-        left: -80px;
-        opacity: .5;
-        /* z-index: 12; NÃO HÁ NECESSIDADE */
-    }
-
-    50% {
-        left: -100px;
-        opacity: .2;
-        /* z-index: 12; NÃO HÁ NECESSIDADE */
-    }
-
-    to {
-        left: -110px;
-        opacity: 0;
-        z-index: -1;
-    }
-}
-
-
-@keyframes deslocamentoDir {
-
-    from {
-        left: 0;
-        z-index: 12;
-    }
-
-    25% {
-        left: 80px;
-        /* z-index: 12;  NÃO HÁ NECESSIDADE*/
-    }
-
-    50% {
-        left: 100px;
-        /* z-index: 12; NÃO HÁ NECESSIDADE*/
-        /* background-color: yellow;  Exemplo que dei no vídeo*/
-    }
-
-    to {
-        left: 110px;
-        z-index: -1;
-    }
-}
-
-
-/*ANIMAÇÃO CSS*/
-
-@keyframes slidein {
-
-    from {
-        left: 0;
-        width: 40%;
-    }
-
-    25% {
-        left: 5%;
-        width: 50%;
-    }
-
-    50% {
-        left: 25%;
-        width: 60%;
-    }
-
-    75% {
-        left: 45%;
-        width: 50%;
-    }
-
-    to {
-        left: 60%;
-        width: 40%;
-    }
-}
-
-@keyframes slideout {
-
-    from {
-        left: 60%;
-        width: 40%;
-    }
-
-    25% {
-        left: 45%;
-        width: 50%;
-    }
-
-    50% {
-        left: 25%;
-        width: 60%;
-    }
-
-    75% {
-        left: 5%;
-        width: 50%;
-    }
-
-    to {
-        left: 0;
-        width: 40%;
-    }
-}
-
-/*VERSÃO MOBILE*/
-@media screen and (max-width: 1040px) {
     .content {
-        width: 100%;
-        height: 100%;
-    }
-
-    .content::before {
-        width: 100%;
-        height: 40%;
-        top: 0;
-        border-radius: 0;
-    }
-    .first-content, .second-content {
+        display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        align-items: center;
+        padding: 0;
+        border-radius: 50px !important;
+        margin: 30px;
     }
 
-    .first-column, .second-column {
+    .first-column {
+        width: 100%;
+        background-color: #800000;
+        padding: 20px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .second-column {
+        width: 100%;
+        padding: 20px;
+        background-color: white;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .first-column .title {
+        font-size: 1.5rem;
+    }
+
+    .second-column .title {
+        font-size: 1.5rem;
+    }
+
+    .second-column .form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .second-column .btn-second {
+        font-size: 1rem;
+        width: 100%; /
+    }
+
+    .first-column .btn {
+        font-size: 1rem;
         width: 100%;
     }
+}
 
-    .sign-in-js .content::before {
-        top: 60%;
-        left: 0;
-        border-radius: 0;
-
+@media (max-width: 480px) {
+    .first-column .title {
+        font-size: 1.2rem;
     }
 
-    .form {
+    .second-column .title {
+        font-size: 1.3rem;
+    }
+
+    .second-column .description {
+        font-size: 0.85rem;
+    }
+
+    .second-column .form {
         width: 90%;
     }
 
-    /* ANIMAÇÃO MOBILE CSS*/
-
-    @keyframes deslocamentoEsq {
-
-        from {
-            top: 0;
-            opacity: 1;
-            z-index: 12;
-        }
-
-        25% {
-            top: -80px;
-            opacity: .5;
-            /* z-index: 12; NÃO HÁ NECESSIDADE */
-        }
-
-        50% {
-            top: -100px;
-            opacity: .2;
-            /* z-index: 12; NÃO HÁ NECESSIDADE */
-        }
-
-        to {
-            top: -110px;
-            opacity: 0;
-            z-index: -1;
-        }
-    }
-
-
-    @keyframes deslocamentoDir {
-
-        from {
-            top: 0;
-            z-index: 12;
-        }
-
-        25% {
-            top: 80px;
-            /* z-index: 12;  NÃO HÁ NECESSIDADE*/
-        }
-
-        50% {
-            top: 100px;
-            /* z-index: 12; NÃO HÁ NECESSIDADE*/
-            /* background-color: yellow;  Exemplo que dei no vídeo*/
-        }
-
-        to {
-            top: 110px;
-            z-index: -1;
-        }
-    }
-
-
-
-    @keyframes slidein {
-
-        from {
-            top: 0;
-            height: 40%;
-        }
-
-        25% {
-            top: 5%;
-            height: 50%;
-        }
-
-        50% {
-            top: 25%;
-            height: 60%;
-        }
-
-        75% {
-            top: 45%;
-            height: 50%;
-        }
-
-        to {
-            top: 60%;
-            height: 40%;
-        }
-    }
-
-    @keyframes slideout {
-
-        from {
-            top: 60%;
-            height: 40%;
-        }
-
-        25% {
-            top: 45%;
-            height: 50%;
-        }
-
-        50% {
-            top: 25%;
-            height: 60%;
-        }
-
-        75% {
-            top: 5%;
-            height: 50%;
-        }
-
-        to {
-            top: 0;
-            height: 40%;
-        }
-    }
-
-}
-
-@media screen and (max-width: 740px) {
-    .form {
-        width: 50%;
+    .second-column .btn-second {
+        font-size: 0.9rem;
     }
 }
-
-@media screen and (max-width: 425px) {
-    .form {
-        width: 100%;
-    }
-}
-
 
 
 

@@ -31,7 +31,7 @@
                 <h1>OS MELHORES HOT DOGS DA CIDADE</h1>
                 <p>Venha experimentar nossos deliciosos lanches, feitos com os melhores ingredientes</p>
 
-                <a href="/login">Peça agora!</a>
+                <a id="menuLink" href="/login">Peça agora!</a>
             </div>
 
             <div class="header-container-image">
@@ -157,6 +157,10 @@
                 } else {
                     cadastroButton.textContent = 'Cadastre-se';
                 }
+
+                const menuLink = document.getElementById('menuLink');
+
+                menuLink.href = '/cardapio'
             }
         });
     </script>

@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
 
+:root {
+    --red: #800000;
+    --branco: #FFFFFF;
+    --preto: black;
+    --amarelo-gema: #EFCA48;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -55,54 +62,50 @@ header {
     width: 100%;
 }
 
-.navbar {
+nav {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
     padding: 10px 20px;
 }
 
-.navbar div {
+nav div {
     width: 33%;
-}
-
-.navbar .nav-icons {
-    display: flex;
-    justify-content: flex-end;
 }
 
 .logo {
     width: 50px;
 }
 
-#H1.menu-title {
-    font-size: 24px;
+nav .title{
+    font-size: 18px;
     color: white;
-    text-align: center;
-    flex-grow: 1;
     margin: 0;
+    text-align: center;
 }
 
-.nav-icons {
-    display: flex;
-    gap: 15px;
-    padding: 0 10px;
+nav .nav-links  {
+    text-align: right;
 }
 
-.nav-icons .icon {
-    width: 30px;
+nav .nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    margin: 0 5%;
 }
 
-.foot-icons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    padding: 20px 0;
+nav .nav-links a:last-child {
+    background-color: var(--amarelo-gema);
+    padding: 10px 15px;
+    color: var(--red);
+    border-radius: 5px;
+    font-weight: bold;
 }
 
-.foot-icons .icon {
-    width: 30px;
-    height: 30px;
+nav .nav-links a:hover {
+    transform: scale(1.1) !important;
+    transition: 0.5s;
 }
 
 .section {
@@ -116,6 +119,25 @@ header {
     text-align: center;
     margin-bottom: 20px;
     font-size: 52px;
+}
+
+.no-products {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 50vh;
+    margin: 0;
+}
+
+.no-products img {
+    width: 150px;
+    margin-bottom: 10px;
+}
+
+.no-products p {
+    font-size: 1.2em;
+    color: #555;
 }
 
 .menu-items {
@@ -183,19 +205,7 @@ header {
 }
 
 footer {
-    background-color: #800000;
-    color: white;
-    text-align: center;
-    padding: 20px;
-}
-
-.imagem-footer {
-    width: 50px;
-    padding: 10px;
-}
-
-footer {
-    background-color: #800000; !important;
+    background-color: var(--red); !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -203,6 +213,7 @@ footer {
     color: white;
     width: 100%;
     text-align: center;
+    position: absolute;
     bottom: 0;
     height: auto;
     padding-bottom: 10px;

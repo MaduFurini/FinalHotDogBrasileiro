@@ -80,7 +80,7 @@ const indexProdutosCardapio = async (req, res) => {
         }, {});
 
 
-        res.render('cardapio/cardapio', { categorias, produtosPorCategoria });
+        return { categorias, produtosPorCategoria };
     } catch (error) {
         console.error("Erro ao listar produtos:", error);
         res.status(500).render('cardapio/cardapio', {

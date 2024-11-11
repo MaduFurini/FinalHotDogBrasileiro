@@ -768,9 +768,9 @@ app.delete('/pedidos/delete/:id' , authMiddleware, verifyUserAbility,async (req,
 // ===== ROTAS DE RENDERIZAÇÃO =====
 app.get('/sair', (req, res) => {
     res.clearCookie('token', { httpOnly: true });
-    const user = null;
+    req.session.user = null;
 
-    res.render('home/home', { user: user });
+    res.redirect('/home');
 });
 
 app.get('/pedidos', (req, res) => {
@@ -802,7 +802,11 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/cardapio', async (req, res) => {
-    const response = await indexProdutosCardapio(req, res);
+    const user = req.session || null;
+
+    const { categorias, produtosPorCategoria } = await indexProdutosCardapio(req, res);
+
+    res.render('cardapio/cardapio', { categorias, produtosPorCategoria, user });
 });
 
 app.get('/home', (req, res) => {

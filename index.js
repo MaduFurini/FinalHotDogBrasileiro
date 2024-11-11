@@ -4,6 +4,8 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const fs = require("fs");
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 // ===== CONFIGURAÇÕES DO SERVER =====
 const app = express();
@@ -12,6 +14,12 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(session({
+    secret: 'exerIsTGHyhAPfuWDgjqWw',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }
+}));
 
 // ===== INSTÂNCIAS =====
 const db = require('./db');
@@ -63,7 +71,14 @@ const {
     generateOtp
 } = require('./controllers/authController');
 const Funcionario = require("./models/usuario");
-const e = require("express");
+
+// INSTÂNCIA DE MIDDLEWARE
+const {
+    authMiddleware,
+    verifyUserAbility,
+    logout
+} = require('./middleware/authMiddleware')
+
 
 // ===== ROTAS DE GERENCIAMENTO DE LOGIN =====
 app.post('/login', async (req, res) => {
@@ -73,39 +88,44 @@ app.post('/login', async (req, res) => {
         const user = await Usuario.findOne({ where: { email } });
 
         if (!user) {
-            return res.status(404).json({ message: 'Usuário não encontrado' });
+            return res.redirect('/login?error=Usuário não encontrado');
         }
-
-        const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(senha, salt);
 
         const senhaValida = await bcrypt.compare(senha, user.senha);
 
         if (!senhaValida) {
-            return res.status(401).json({ message: 'Senha inválida' });
+            return res.redirect('/login?error=Senha inválida');
         }
 
-        const tokenExistence = await Token.findOne({ where: {
+        const tokenExistence = await Token.findOne({
+            where: {
                 id_usuario: user.id,
                 tipo_usuario: user.tipo_usuario,
-            } });
+            },
+        });
 
         if (tokenExistence) {
             await tokenExistence.destroy();
         }
 
-        const token = jwt.sign({ id: user.id, tipo_usuario: user.tipo_usuario }, 'secret_key', { expiresIn: '1h' });
-        const expiresAt = new Date(Date.now() + 3600 * 1000 - (3 * 60 * 60 * 1000));
+        const token = jwt.sign({ id: user.id, tipo_usuario: user.tipo_usuario }, 'exerIsTGHyhAPfuWDgjqWw', { expiresIn: '1h' });
+        const expiresAt = new Date(Date.now() + 3600 * 1000 - 3 * 60 * 60 * 1000);
 
         await Token.create({
             id_usuario: user.id,
             tipo_usuario: user.tipo_usuario,
             token: token,
-            expires_at: expiresAt
+            expires_at: expiresAt,
         });
 
-        return res.redirect(`/home?user=${user}&token=${token}`);
+        req.session.user = {
+            id: user.id,
+            tipo_usuario: user.tipo_usuario,
+        };
 
+        res.cookie('token', token, { httpOnly: true });
+
+        return res.redirect(`/home`);
     } catch (error) {
         console.error('Erro ao autenticar usuário:', error);
         res.status(500).json({ message: 'Erro interno do servidor' });
@@ -130,10 +150,9 @@ app.post('/forgotPassword', async (req, res) => {
             return res.redirect(`/resetPassword?email=${email}`);
         }
 
-        res.status(500).json({ message: 'Email não encontrado' });
+        return res.redirect('/login?error=Erro ao enviar email');
     } catch (error) {
-        console.error('Erro ao enviar OTP:', error);
-        res.status(500).json({ message: 'Erro ao enviar OTP' });
+        return res.redirect('/login?error=Erro ao enviar email');
     }
 });
 app.post('/resetPassword', async (req, res) => {
@@ -145,24 +164,21 @@ app.post('/resetPassword', async (req, res) => {
         });
 
         if (usuario.otp.toString() === otp) {
-            console.log(usuario.id)
             return res.redirect(`/newPassword?userId=${usuario.id}&email=${email}`);
         } else {
-            console.log('OTP não corresponde.');
-            return res.status(400).json({ message: 'OTP não corresponde.' });
+            return res.redirect('/login?error=Código não corresponde');
         }
 
 
     } catch (error) {
-        console.error('Erro ao encontrar email:', error);
-        res.status(500).json({ message: 'Erro ao encontrar email' });
+        return res.redirect('/login?error=Email não encontrado');
     }
 });
 app.post('/newPassword', async (req, res) => {
     const { password, confirmPassword, email, userId } = req.body;
 
     if (password !== confirmPassword) {
-        return res.status(400).json({ message: 'As senhas não coincidem' });
+        return res.redirect('/login?error=Senha inválida');
     }
 
     try {
@@ -171,7 +187,6 @@ app.post('/newPassword', async (req, res) => {
 
         const usuario = await Usuario.findByPk(userId);
 
-        console.log(usuario)
 
         if (usuario) {
             await Usuario.update(
@@ -179,18 +194,17 @@ app.post('/newPassword', async (req, res) => {
                 { where: { id: usuario.id } }
             );
 
-            const token = jwt.sign({ id: usuario.id, email: usuario.email }, 'seu_segredo', {
+            const token = jwt.sign({ id: usuario.id, email: usuario.email }, 'exerIsTGHyhAPfuWDgjqWw', {
                 expiresIn: '1h'
             });
 
             return res.redirect('/login');
         }
 
-        return res.status(404).json({ message: 'Usuário não encontrado' });
+        return res.redirect('/login?error=Usuário não encontrado');
 
     } catch (e) {
-        console.error('Erro ao atualizar senha:', e);
-        return res.status(500).json({ message: 'Erro ao atualizar senha' });
+        return res.redirect('/login?error=Erro ao atulizar senha');
     }
 });
 
@@ -240,7 +254,7 @@ app.post('/clientes/create', async (req, res) => {
             await tokenExistence.destroy();
         }
 
-        const token = jwt.sign({ id: cliente.id, tipo_usuario: 'Cliente' }, 'secret_key', { expiresIn: '1h' });
+        const token = jwt.sign({ id: cliente.id, tipo_usuario: 'Cliente' }, 'exerIsTGHyhAPfuWDgjqWw', { expiresIn: '1h' });
         const expiresAt = new Date(Date.now() + 3600 * 1000 - (3 * 60 * 60 * 1000));
 
         await Token.create({
@@ -262,7 +276,7 @@ app.post('/clientes/create', async (req, res) => {
 
 
 // ===== ROTAS DE GERENCIAMENTO DE PRODUTOS =====
-app.get('/produtos', async(req, res) => {
+app.get('/produtos', authMiddleware, verifyUserAbility,  async(req, res) => {
     const response = await indexProdutos(req);
 
     console.log(response);
@@ -276,7 +290,7 @@ app.get('/produtos', async(req, res) => {
         totalPages: response.totalPages
     });
 });
-app.get('/produtos/search' , async (req, res) => {
+app.get('/produtos/search', authMiddleware, verifyUserAbility, async (req, res) => {
     const nome = req.query.nome;
 
     let produtos = null;
@@ -302,7 +316,7 @@ app.get('/produtos/search' , async (req, res) => {
         res.status(500).json({ message: 'Erro ao buscar produtos' });
     }
 });
-app.get('/produtos/:id' , async (req, res) => {
+app.get('/produtos/:id' , authMiddleware, verifyUserAbility, async (req, res) => {
     const response = await getProdutos(req, res);
 
     if (response.error) {
@@ -311,7 +325,7 @@ app.get('/produtos/:id' , async (req, res) => {
 
     res.json(response);
 });
-app.post('/produto/create', upload.single('imagem'), async (req, res) => {
+app.post('/produto/create', authMiddleware, verifyUserAbility, upload.single('imagem'), async (req, res) => {
     try {
         const response = await storeProdutos(req);
 
@@ -325,7 +339,7 @@ app.post('/produto/create', upload.single('imagem'), async (req, res) => {
         res.redirect('/produtos?success=false&message=Erro ao criar produto');
     }
 });
-app.post('/produtos/update/:id', upload.single('imagemUpdate'), async (req, res) => {
+app.post('/produtos/update/:id', authMiddleware, verifyUserAbility, upload.single('imagemUpdate'), async (req, res) => {
     try {
         const response = await updateProdutos(req);
 
@@ -339,7 +353,7 @@ app.post('/produtos/update/:id', upload.single('imagemUpdate'), async (req, res)
         res.redirect('/produtos?success=false&message=Erro ao atualizar produto');
     }
 })
-app.put('/produtos/status/:id', async (req, res) => {
+app.put('/produtos/status/:id', authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         await updateStatusProdutos(req);
         res.status(200).json({ message: 'Status atualizado com sucesso' });
@@ -347,7 +361,7 @@ app.put('/produtos/status/:id', async (req, res) => {
         res.status(500).json({ message: 'Erro ao atualizar o status do produto', error });
     }
 });
-app.put('/produtos/removeImage/:id' ,async (req, res) => {
+app.put('/produtos/removeImage/:id' ,authMiddleware, verifyUserAbility, async (req, res) => {
     try {
         const produto = await Produto.findByPk(req.params.id);
 
@@ -372,7 +386,7 @@ app.put('/produtos/removeImage/:id' ,async (req, res) => {
         res.status(500).json({ message: 'Erro ao remover imagem', error });
     }
 });
-app.delete('/produtos/delete/:id' ,async (req, res) => {
+app.delete('/produtos/delete/:id' , authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         const response = await destroyProdutos(req);
 
@@ -388,7 +402,7 @@ app.delete('/produtos/delete/:id' ,async (req, res) => {
 });
 
 // ===== ROTAS DE GERENCIAMENTO DE CATEGORIAS =====
-app.get('/categorias', async (req, res) => {
+app.get('/categorias', authMiddleware, verifyUserAbility, async (req, res) => {
     const response = await indexCategorias(req);
 
     if (response.error) {
@@ -401,7 +415,7 @@ app.get('/categorias', async (req, res) => {
         totalPages: response.totalPages
     });
 });
-app.get('/categorias/all', async (req, res) => {
+app.get('/categorias/all', authMiddleware, verifyUserAbility, async (req, res) => {
     try {
         const categorias = await Categoria.findAll({
             where: {
@@ -415,7 +429,7 @@ app.get('/categorias/all', async (req, res) => {
         res.status(500).send('Erro ao buscar categorias');
     }
 });
-app.get('/categorias/search' , async (req, res) => {
+app.get('/categorias/search' , authMiddleware, verifyUserAbility, async (req, res) => {
     const nome = req.query.nome;
 
     let categorias = null;
@@ -441,7 +455,7 @@ app.get('/categorias/search' , async (req, res) => {
         res.status(500).json({ message: 'Erro ao buscar produtos' });
     }
 });
-app.get('/categorias/:id' , async (req, res) => {
+app.get('/categorias/:id' , authMiddleware, verifyUserAbility,async (req, res) => {
     const response = await getCategorias(req, res);
 
     if (response.error) {
@@ -450,7 +464,7 @@ app.get('/categorias/:id' , async (req, res) => {
 
     res.json(response);
 });
-app.post('/categoria/create', async (req, res) => {
+app.post('/categoria/create', authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         const response = await storeCategorias(req);
 
@@ -464,7 +478,7 @@ app.post('/categoria/create', async (req, res) => {
         res.redirect('/categorias?success=false&message=Erro ao criar categoria');
     }
 });
-app.post('/categorias/update/:id', async (req, res) => {
+app.post('/categorias/update/:id', authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         const response = await updateCategorias(req);
 
@@ -478,7 +492,7 @@ app.post('/categorias/update/:id', async (req, res) => {
         res.redirect('/categorias?success=false&message=Erro ao atualizar categoria');
     }
 })
-app.put('/categorias/status/:id', async (req, res) => {
+app.put('/categorias/status/:id', authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         await updateStatusCategorias(req);
         res.status(200).json({ message: 'Status atualizado com sucesso' });
@@ -486,7 +500,7 @@ app.put('/categorias/status/:id', async (req, res) => {
         res.status(500).json({ message: 'Erro ao atualizar o status da categoria', error });
     }
 });
-app.delete('/categorias/delete/:id' ,async (req, res) => {
+app.delete('/categorias/delete/:id' ,authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         const response = await destroyCategorias(req);
 
@@ -502,7 +516,7 @@ app.delete('/categorias/delete/:id' ,async (req, res) => {
 });
 
 // ===== ROTAS DE GERENCIAMENTO DE FUNCIONÁRIOS =====
-app.get('/funcionarios', async (req, res) => {
+app.get('/funcionarios', authMiddleware, verifyUserAbility,async (req, res) => {
     const response = await indexFuncionarios(req);
 
     if (response.error) {
@@ -515,7 +529,7 @@ app.get('/funcionarios', async (req, res) => {
         totalPages: response.totalPages
     });
 });
-app.get('/funcionarios/search' , async (req, res) => {
+app.get('/funcionarios/search' , authMiddleware, verifyUserAbility,async (req, res) => {
     const nome = req.query.nome;
 
     let funcionarios = null;
@@ -545,7 +559,7 @@ app.get('/funcionarios/search' , async (req, res) => {
         res.status(500).json({ message: 'Erro ao buscar funcionários' });
     }
 });
-app.get('/funcionarios/:id' , async (req, res) => {
+app.get('/funcionarios/:id' , authMiddleware, verifyUserAbility, async (req, res) => {
     const response = await getFuncionarios(req, res);
 
     if (response.error) {
@@ -554,7 +568,7 @@ app.get('/funcionarios/:id' , async (req, res) => {
 
     res.json(response);
 });
-app.post('/funcionario/create', async (req, res) => {
+app.post('/funcionario/create', authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         const response = await storeFuncionarios(req);
 
@@ -568,7 +582,7 @@ app.post('/funcionario/create', async (req, res) => {
         return res.redirect('/funcionarios?success=false&message=Erro ao criar funcionário');
     }
 });
-app.post('/funcionarios/update/:id', async (req, res) => {
+app.post('/funcionarios/update/:id', authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         const response = await updateFuncionarios(req);
 
@@ -582,7 +596,7 @@ app.post('/funcionarios/update/:id', async (req, res) => {
         return res.redirect('/funcionarios?success=false&message=Erro ao atualizar funcionário');
     }
 })
-app.put('/funcionarios/status/:id', async (req, res) => {
+app.put('/funcionarios/status/:id', authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         await updateStatusFuncionarios(req);
         res.status(200).json({ message: 'Status atualizado com sucesso' });
@@ -590,7 +604,7 @@ app.put('/funcionarios/status/:id', async (req, res) => {
         res.status(500).json({ message: 'Erro ao atualizar o status do funcionário', error });
     }
 });
-app.delete('/funcionarios/delete/:id' ,async (req, res) => {
+app.delete('/funcionarios/delete/:id' ,authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         const response = await destroyFuncionarios(req);
 
@@ -606,7 +620,7 @@ app.delete('/funcionarios/delete/:id' ,async (req, res) => {
 });
 
 // ===== ROTAS DE GERENCIAMENTO DE PEDIDOS =====
-app.get('/pedidos', async (req, res) => {
+app.get('/pedidos', authMiddleware, verifyUserAbility,async (req, res) => {
     const response = await indexPedidos(req);
 
     if (response.error) {
@@ -619,7 +633,7 @@ app.get('/pedidos', async (req, res) => {
         totalPages: response.totalPages
     });
 });
-app.get('/pedidos/all', async (req, res) => {
+app.get('/pedidos/all', authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         const categorias = await Categoria.findAll({
             where: {
@@ -633,7 +647,7 @@ app.get('/pedidos/all', async (req, res) => {
         res.status(500).send('Erro ao buscar categorias');
     }
 });
-app.get('/pedidos/:id/produtos', async (req, res) => {
+app.get('/pedidos/:id/produtos',authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         const pedidoId = req.params.id;
 
@@ -673,7 +687,7 @@ app.get('/pedidos/:id/produtos', async (req, res) => {
         res.status(500).json({ message: 'Erro ao buscar produtos' });
     }
 });
-app.get('/pedidos/search' , async (req, res) => {
+app.get('/pedidos/search' , authMiddleware, verifyUserAbility,async (req, res) => {
     const codigo = req.query.codigo;
 
     let pedidos = null;
@@ -699,7 +713,7 @@ app.get('/pedidos/search' , async (req, res) => {
         res.status(500).json({ message: 'Erro ao buscar produtos' });
     }
 });
-app.get('/pedidos/:id' , async (req, res) => {
+app.get('/pedidos/:id' , authMiddleware, verifyUserAbility,async (req, res) => {
     const response = await getPedidos(req, res);
 
     if (response.error) {
@@ -722,7 +736,7 @@ app.post('/pedidos/create', async (req, res) => {
         res.redirect('/categorias?success=false&message=Erro ao criar categoria');
     }
 });
-app.post('/pedidos/update/:id', async (req, res) => {
+app.post('/pedidos/update/:id', authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         const response = await updatePedidos(req);
 
@@ -736,7 +750,7 @@ app.post('/pedidos/update/:id', async (req, res) => {
         res.redirect('/pedidos?success=false&message=Erro ao atualizar pedido');
     }
 })
-app.delete('/pedidos/delete/:id' ,async (req, res) => {
+app.delete('/pedidos/delete/:id' , authMiddleware, verifyUserAbility,async (req, res) => {
     try {
         const response = await destroyPedidos(req);
 
@@ -754,6 +768,8 @@ app.delete('/pedidos/delete/:id' ,async (req, res) => {
 
 // ===== ROTAS DE RENDERIZAÇÃO =====
 app.get('/sair', (req, res) => {
+    logout();
+
     res.render('home/home');
 });
 
@@ -787,13 +803,12 @@ app.get('/login', (req, res) => {
 
 app.get('/cardapio', async (req, res) => {
     const response = await indexProdutosCardapio(req, res);
-
 });
 
 app.get('/home', (req, res) => {
-    const user = req.user || null;
+    const user = req.session || null;
 
-    res.render('home/home', { user });
+    res.render('home/home', { user: user });
 });
 
 

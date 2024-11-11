@@ -21,7 +21,7 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       tipo_usuario: {
-        type: Sequelize.ENUM ('Cliente', 'Usuario'),
+        type: Sequelize.ENUM ('Cliente', 'Admin'),
       },
       token:{
         type: Sequelize.TEXT,

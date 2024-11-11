@@ -1,4 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Lilita+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
+
+:root {
+    --red: #800000;
+    --branco: #FFFFFF;
+    --preto: black;
+    --amarelo-gema: #EFCA48;
+    --primary-font: 'Dosis', 'sans-serif'
+}
 
 .libre-franklin {
     font-family: "Libre Franklin", sans-serif;
@@ -27,4 +36,8 @@
 
 .text-white a {
     color: white !important;
+}
+
+.font-family {
+    font-family: var(--primary-font);
 }

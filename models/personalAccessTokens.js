@@ -19,7 +19,7 @@ const PersonalAccessTokens = database.define('personal_access_tokens', {
         onDelete: 'CASCADE'
     },
     tipo_usuario: {
-        type: Sequelize.ENUM ('Cliente', 'Usuario'),
+        type: Sequelize.ENUM ('Cliente', 'Admin'),
     },
     token:{
         type: Sequelize.TEXT,

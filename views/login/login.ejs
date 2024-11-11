@@ -50,19 +50,15 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function mascaraCpf(cpfInput) {
-            // Remove caracteres que não são dígitos
             let valor = cpfInput.value.replace(/\D/g, '');
 
-            // Limita a 11 dígitos
             if (valor.length > 11) valor = valor.slice(0, 11);
 
-            // Formata o CPF
             cpfInput.value = valor
-                .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o primeiro ponto
-                .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o segundo ponto
-                .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o traço
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
 
-            // Valida CPF quando chegar aos 11 dígitos
             if (valor.length === 11) {
                 if (!validarCPF(valor)) {
                     Swal.fire({
@@ -79,7 +75,6 @@
         function validarCPF(cpf) {
             cpf = cpf.replace(/\D/g, '');
 
-            // CPF deve ter 11 dígitos e não pode ser uma sequência repetida
             if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
                 return false;
             }
@@ -87,7 +82,6 @@
             let soma = 0;
             let resto;
 
-            // Validação do primeiro dígito verificador
             for (let i = 1; i <= 9; i++) {
                 soma += parseInt(cpf.charAt(i - 1)) * (11 - i);
             }
@@ -101,7 +95,6 @@
 
             soma = 0;
 
-            // Validação do segundo dígito verificador
             for (let i = 1; i <= 10; i++) {
                 soma += parseInt(cpf.charAt(i - 1)) * (12 - i);
             }
@@ -116,14 +109,39 @@
             return true;
         }
 
+        function removeQueryParam(param) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete(param);
+            window.history.replaceState({}, document.title, url);
+        }
+
         const params = new URLSearchParams(window.location.search);
         const message = params.get('message');
+        const error = params.get('error');
 
         if (message) {
             Swal.fire({
                 icon: 'error',
                 title: 'Erro',
                 text: message,
+            }).then(() => {
+                removeQueryParam('error');
+            });
+        }
+
+        if (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: error,
+                confirmButtonText: 'Ok',
+                customClass: {
+                    title: 'font-family',
+                    text: 'font-family',
+                    confirmButton: 'btn-second'
+                }
+            }).then(() => {
+                removeQueryParam('error');
             });
         }
     </script>

@@ -124,28 +124,32 @@
             <p>R.Dr.Abrão Venturi Filho, 60, Mococa</p>
         </div>
     </footer>
-
    <script src="/js/interactions/home/home.js"></script>
-   <script>
-     document.addEventListener("DOMContentLoaded", function() {
-       // Verifica se o usuário existe
-       <% if (user) { %>
-         const userType = '<%= user.tipo_usuario %>';  // Acessando o tipo de usuário do objeto user
 
-         const cadastroButton = document.querySelector("a[href='/login']");
+<script>
+    let userData = <%- JSON.stringify(user) %>;
+    userData = userData.user;
 
-         // Verificação do tipo de usuário
-         if (userType === 'admin') {
-           cadastroButton.textContent = 'Painel de Controle';
-         } else if (userType === 'cliente') {
-           cadastroButton.style.display = 'none';  // Esconde o botão para clientes
-         }
-       <% } else { %>
-         const cadastroButton = document.querySelector("a[href='/login']");
-         cadastroButton.textContent = 'Cadastre-se';  // Exibe o texto 'Cadastre-se' se não houver usuário logado
-       <% } %>
-     });
-   </script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const idUser = userData.id;
+        let userTipo = userData.tipo_usuario;
+
+        const cadastroButton = document.getElementById("loginBtn");
+
+userTipo = 'admin'
+        if (idUser && userTipo) {
+            if (userTipo === 'admin') {
+                cadastroButton.textContent = 'Painel de Controle';
+                cadastroButton.href = '/pedidos'
+            } else if (userTipo === 'cliente') {
+                cadastroButton.textContent = 'Pedidos';
+                cadastroButton.href = '/pedidos/cliente'
+            }
+        } else {
+            cadastroButton.textContent = 'Cadastre-se';
+        }
+    });
+</script>
 
 </body>
 </html>

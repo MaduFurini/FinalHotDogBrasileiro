@@ -1,12 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
 
-:root {
-    --red: #800000;
-    --branco: #FFFFFF;
-    --preto: black;
-    --amarelo-gema: #EFCA48;
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -100,8 +93,19 @@ header {
     width: 30px;
 }
 
-.section {
+.foot-icons {
     display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px 0;
+}
+
+.foot-icons .icon {
+    width: 30px;
+    height: 30px;
+}
+
+.section {
     margin: 20px auto;
     max-width: 1200px;
     padding: 20px;
@@ -112,25 +116,6 @@ header {
     text-align: center;
     margin-bottom: 20px;
     font-size: 52px;
-}
-
-.no-products {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: 50vh;
-    margin: 0;
-}
-
-.no-products img {
-    width: 150px;
-    margin-bottom: 10px;
-}
-
-.no-products p {
-    font-size: 1.2em;
-    color: #555;
 }
 
 .menu-items {
@@ -198,7 +183,19 @@ header {
 }
 
 footer {
-    background-color: var(--red); !important;
+    background-color: #800000;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.imagem-footer {
+    width: 50px;
+    padding: 10px;
+}
+
+footer {
+    background-color: #800000; !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -206,7 +203,6 @@ footer {
     color: white;
     width: 100%;
     text-align: center;
-    position: absolute;
     bottom: 0;
     height: auto;
     padding-bottom: 10px;
@@ -223,23 +219,22 @@ footer .footer-info-img img {
     border-radius: 360px;
 }
 
-/* Estilos responsivos */
 @media (max-width: 768px) {
     .menu-item {
-        width: calc(45% - 20px); /* Largura para telas menores */
+        width: calc(45% - 20px);
     }
 
     #H1.menu-title {
-        font-size: 20px; /* Tamanho da fonte menor */
+        font-size: 20px;
     }
 }
 
 @media (max-width: 480px) {
     .menu-item {
-        width: 100%; /* Largura total em telas muito pequenas */
+        width: 100%;
     }
 
     .nav-icons .icon {
-        width: 25px; /* Ícones menores em telas pequenas */
+        width: 25px;
     }
 }

@@ -44,7 +44,7 @@
                                 <p class="descricao" style="visibility: hidden;">&nbsp;</p>
                             <% } %>
                             <p>R$ <%= produto.preco.toFixed(2) %></p>
-                            <button id="adicionarBtn">Adicionar</button>
+                            <button id="adicionarBtn" onclick="addToCart(<%= JSON.stringify(user) %>, '<%= produto.id %>')">Adicionar</button>
                         </div>
                     <% }) %>
                 </div>
@@ -78,6 +78,22 @@
             <p>R.Dr.Abrão Venturi Filho, 60, Mococa</p>
         </div>
     </footer>
+
+    <div id="cartModal">
+        <div class="modal-header">
+            <h2>Carrinho</h2>
+            <button class="close-btn" onclick="toggleCart()">×</button>
+        </div>
+        <div id="cartItems">
+            <!-- Produtos adicionados ao carrinho serão exibidos aqui -->
+        </div>
+        <div class="modal-footer">
+            <div id="totalPrice" class="total-price"></div>
+            <div id="nextButton"></div>
+        </div>
+    </div>
+
+    <div id="cartPullIcon" onclick="openCartModal()" style="display: none;">&#9654;</div>
 
    <script src="/js/interactions/cardapio/cardapio.js"></script>
     <script>
@@ -113,14 +129,6 @@
                 }
             });
 
-            document.getElementById('adicionarBtn').addEventListener('click', function() {
-                let userData = <%- JSON.stringify(user) %>;
-                userData = userData.user;
-
-                if (!userData) {
-                    window.location.href = '/login';
-                }
-            });
     </script>
 </body>
 </html>

@@ -112,7 +112,7 @@ app.post('/login', async (req, res) => {
 
         await Token.create({
             id_usuario: user.id,
-            tipo_usuario: user.tipo_usuario,
+            tipo_usuario: user.tipo_usuario.charAt(0).toUpperCase() + user.tipo_usuario.slice(1),
             token: token,
             expires_at: expiresAt,
         });

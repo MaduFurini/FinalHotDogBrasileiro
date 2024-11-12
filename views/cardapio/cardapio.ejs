@@ -7,57 +7,76 @@
     <link rel="stylesheet" href="/css/cardapio/cardapio.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div>
-                <img src="/images/logo.png" alt="Logo Hot Dog" class="logo">
-            </div>
-            <div class="title">
-                <h1 class="menu-title">Cardápio</h1>
-            </div>
-            <div class="nav-links">
-                <a href="/home">INÍCIO</a>
-                <a href="/login" id="loginBtn">Cadastre-se</a>
-            </div>
-        </nav>
-    </header>
-
-    <% let produtosEncontrados = 0; %>
-
-    <% categorias.forEach(categoria => { %>
-        <% if (produtosPorCategoria[categoria.id] && produtosPorCategoria[categoria.id].length > 0) { %>
-            <% produtosEncontrados++; %> <!-- Incrementa a contagem de produtos encontrados -->
-            <section class="section">
-                <div class="title-container">
-                    <hr class="hr-top">
-                    <hr class="hr-bottom">
-                    <h2><%= categoria.nome %></h2>
+    <main>
+        <header>
+            <nav class="navbar">
+                <div>
+                    <img src="/images/logo.png" alt="Logo Hot Dog" class="logo">
                 </div>
-                <div class="menu-items">
-                    <% produtosPorCategoria[categoria.id].forEach(produto => { %>
-                        <div class="menu-item">
-                            <img src="<%= produto.img ? produto.img : 'images/produtos/default.webp' %>" alt="<%= produto.nome %>" />
-                            <p class="nome"><%= produto.nome %></p>
-                            <% if (produto.descricao) { %>
-                                <p class="descricao"><%= produto.descricao %></p>
-                            <% } else { %>
-                                <p class="descricao" style="visibility: hidden;">&nbsp;</p>
-                            <% } %>
-                            <p>R$ <%= produto.preco.toFixed(2) %></p>
-                            <button id="adicionarBtn" onclick="addToCart(<%= JSON.stringify(user) %>, '<%= produto.id %>')">Adicionar</button>
-                        </div>
-                    <% }) %>
+                <div class="title">
+                    <h1 class="menu-title">Cardápio</h1>
                 </div>
-            </section>
+                <div class="nav-links">
+                    <a href="/home">INÍCIO</a>
+                    <a href="/login" id="loginBtn">Cadastre-se</a>
+                </div>
+            </nav>
+        </header>
+
+        <% let produtosEncontrados = 0; %>
+
+        <% categorias.forEach(categoria => { %>
+            <% if (produtosPorCategoria[categoria.id] && produtosPorCategoria[categoria.id].length > 0) { %>
+                <% produtosEncontrados++; %>
+                <section class="section">
+                    <div class="title-container">
+                        <hr class="hr-top">
+                        <hr class="hr-bottom">
+                        <h2><%= categoria.nome %></h2>
+                    </div>
+                    <div class="menu-items">
+                        <% produtosPorCategoria[categoria.id].forEach(produto => { %>
+                            <div class="menu-item">
+                                <img src="<%= produto.img ? produto.img : 'images/produtos/default.webp' %>" alt="<%= produto.nome %>" />
+                                <p class="nome"><%= produto.nome %></p>
+                                <% if (produto.descricao) { %>
+                                    <p class="descricao"><%= produto.descricao %></p>
+                                <% } else { %>
+                                    <p class="descricao" style="visibility: hidden;">&nbsp;</p>
+                                <% } %>
+                                <p>R$ <%= produto.preco.toFixed(2) %></p>
+                                <button id="adicionarBtn" onclick="addToCart(<%= JSON.stringify(user) %>, '<%= produto.id %>')">Adicionar</button>
+                            </div>
+                        <% }) %>
+                    </div>
+                </section>
+            <% } %>
+        <% }) %>
+
+        <% if (produtosEncontrados === 0) { %>
+            <div class="no-products">
+                <img src="images/noProduct.png" alt="Nenhum produto encontrado" />
+                <p>Ops! Houve um erro ao buscar produtos. Tente novamente mais tarde</p>
+            </div>
         <% } %>
-    <% }) %>
 
-    <% if (produtosEncontrados === 0) { %>
-        <div class="no-products">
-            <img src="images/noProduct.png" alt="Nenhum produto encontrado" />
-            <p>Ops! Houve um erro ao buscar produtos. Tente novamente mais tarde</p>
-        </div>
-    <% } %>
+
+            <div id="cartModal">
+                <div class="modal-header">
+                    <h2>Carrinho</h2>
+                    <button class="close-btn" onclick="toggleCart()">×</button>
+                </div>
+                <div id="cartItems">
+                    <!-- Produtos adicionados ao carrinho serão exibidos aqui -->
+                </div>
+                <div class="modal-footer">
+                    <div id="totalPrice" class="total-price"></div>
+                    <div id="nextButton"></div>
+                </div>
+            </div>
+
+            <div id="cartPullIcon" onclick="openCartModal()" style="display: none;">&#9654;</div>
+    </main>
 
 
      <footer>
@@ -78,22 +97,6 @@
             <p>R.Dr.Abrão Venturi Filho, 60, Mococa</p>
         </div>
     </footer>
-
-    <div id="cartModal">
-        <div class="modal-header">
-            <h2>Carrinho</h2>
-            <button class="close-btn" onclick="toggleCart()">×</button>
-        </div>
-        <div id="cartItems">
-            <!-- Produtos adicionados ao carrinho serão exibidos aqui -->
-        </div>
-        <div class="modal-footer">
-            <div id="totalPrice" class="total-price"></div>
-            <div id="nextButton"></div>
-        </div>
-    </div>
-
-    <div id="cartPullIcon" onclick="openCartModal()" style="display: none;">&#9654;</div>
 
    <script src="/js/interactions/cardapio/cardapio.js"></script>
     <script>

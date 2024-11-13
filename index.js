@@ -18,7 +18,7 @@ app.use(session({
     secret: 'exerIsTGHyhAPfuWDgjqWw',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }
+    cookie: { maxAge: 60 * 60 * 1000 }
 }));
 
 // ===== INSTÂNCIAS =====
@@ -66,6 +66,9 @@ const {
     updatePedidos,
     destroyPedidos
 } = require('./controllers/pedidoController');
+const {
+    indexEnderecos
+} = require('./controllers/enderecoController')
 const {
     sendOtpEmail,
     generateOtp
@@ -761,6 +764,20 @@ app.delete('/pedidos/delete/:id' , authMiddleware, verifyUserAbility,async (req,
     } catch (error) {
         console.error('Erro ao excluir produto:', error);
         res.status(500).json({ message: 'Erro ao excluir pedido' });
+    }
+});
+
+// ===== ROTAS DE GERENCIAMENTO DE ENDEREÇOS =====
+app.post('/enderecos', authMiddleware, async (req, res) => {
+    const user = req.session || null;
+
+    const response = await indexEnderecos(req, user);
+
+    if (response === true) {
+        return response;
+    } else {
+        console.log(response.error)
+        return res.status(500).json({ message: response.error });
     }
 });
 

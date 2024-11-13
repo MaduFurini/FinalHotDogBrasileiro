@@ -361,9 +361,9 @@ footer .footer-info-img img {
 .modal-footer {
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: 90%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
     padding: 5% 10%;
     background-color: #fff;
@@ -371,19 +371,39 @@ footer .footer-info-img img {
     box-sizing: border-box;
 }
 
-.total-price {
-    font-size: 1.2rem;
+.modal-footer label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
     font-weight: bold;
+    width: 100%;
 }
 
-#nextButton button{
-    padding: 10px 15px;
+.modal-footer input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.total-price {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+#nextButton button {
     background-color: #800000;
     color: white;
-    margin-left: auto;
+    font-size: 16px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 #nextButton button:hover{

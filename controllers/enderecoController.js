@@ -4,10 +4,12 @@ const fs = require("fs");
 
 const Endereco = require("../models/endereco");
 const EnderecoUser = require('../models/usuarioEndereco');
+const {Op} = require("sequelize");
 
 const indexEnderecos = async (req, user) => {
     user = user.user;
 
+    console.log(user);
     try {
         const enderecosUser = await EnderecoUser.findAll({
             where: {
@@ -17,11 +19,15 @@ const indexEnderecos = async (req, user) => {
 
         const enderecoIds = enderecosUser.map(enderecoUser => enderecoUser.id_endereco);
 
-        return await Endereco.findAll({
+        const endereco = await Endereco.findAll({
             where: {
-                id: enderecoIds
+                id: {
+                    [Op.in]: enderecoIds
+                }
             }
         });
+
+        return endereco;
     } catch (error) {
         console.error("Erro ao listar endereços:", error);
         return { error: "Erro ao listar endereços" };

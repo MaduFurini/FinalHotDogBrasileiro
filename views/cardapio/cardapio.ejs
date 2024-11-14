@@ -73,10 +73,15 @@
                     <!-- Aqui os endereços serão exibidos dinamicamente -->
                 </div>
                 <div class="modal-footer">
-                    <label for="observacao">Observação</label>
-                    <input type="text" name="observacao" id="observacao"></input>
+                    <div id="observacaoContainer">
+                        <label for="observacao" id="labelObs">Observação</label>
+                        <input type="text" name="observacao" id="observacao"></input>
+                    </div>
                     <div id="totalPrice" class="total-price"></div>
-                    <div id="nextButton"></div>
+                    <div class="buttons">
+                        <div id="nextButton"></div>
+                        <div id="backButton"></div>
+                    </div>
                 </div>
             </div>
 
@@ -104,6 +109,7 @@
     </footer>
 
    <script src="/js/interactions/cardapio/cardapio.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
             let userData = <%- JSON.stringify(user) %>;
             userData = userData.user;

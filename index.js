@@ -773,12 +773,11 @@ app.post('/enderecos', authMiddleware, async (req, res) => {
 
     const response = await indexEnderecos(req, user);
 
-    if (response === true) {
-        return response;
-    } else {
-        console.log(response.error)
+    if (response.error) {
         return res.status(500).json({ message: response.error });
     }
+
+    res.json(response);
 });
 
 

@@ -54,11 +54,11 @@ function renderCartItems(user) {
         
         <p>${item.nome} - R$${item.preco.toFixed(2)}</p>
         <div class="quantity-container">
-            <button onclick="updateQuantity('${item.id}', 'decrement')">-</button>
-            <input type="number" disabled id="quantidade_${item.id}" value="${item.quantidade}" min="1" onchange="updateQuantity('${item.id}', 'input')">
-            <button onclick="updateQuantity('${item.id}', 'increment')">+</button>
+            <button onclick="updateQuantity('${item.nome}', 'decrement')">-</button>
+            <input type="number" disabled id="quantidade_${item.nome}" value="${item.quantidade}" min="1" onchange="updateQuantity('${item.id}', 'input')">
+            <button onclick="updateQuantity('${item.nome}', 'increment')">+</button>
         </div>
-        <button class="delete-button" onclick="removeFromCart('${item.id}')">Excluir</button>
+        <button class="delete-button" onclick="removeFromCart('${item.nome}')">Excluir</button>
     `;
 
         cartItemsContainer.appendChild(cartItem);
@@ -78,8 +78,8 @@ function renderCartItems(user) {
     toggleCartIcon();
 }
 
-function removeFromCart(id) {
-    cart = cart.filter(item => item.id !== id);
+function removeFromCart(nome) {
+    cart = cart.filter(item => item.nome !== nome);
     renderCartItems();
 }
 
@@ -98,9 +98,9 @@ function openCartModal() {
     }
 }
 
-function updateQuantity(id, action) {
-    const product = cart.find(item => item.id === id);
-    const quantityInput = document.getElementById(`quantidade_${id}`);
+function updateQuantity(nome, action) {
+    const product = cart.find(item => item.nome === nome);
+    const quantityInput = document.getElementById(`quantidade_${nome}`);
 
     if (product) {
         if (action === 'increment') {
@@ -120,7 +120,7 @@ function updateQuantity(id, action) {
 function hideCartItems() {
     const cartItemsContainer = document.getElementById("cartItems");
     if (cartItemsContainer) {
-        cartItemsContainer.style.display = 'none'; // Esconde o container
+        cartItemsContainer.style.display = 'none';
     }
 }
 
@@ -128,19 +128,45 @@ function hideCartItems() {
 function showCartItems() {
     const cartItemsContainer = document.getElementById("cartItems");
     if (cartItemsContainer) {
-        cartItemsContainer.style.display = 'block'; // Mostra o container
+        cartItemsContainer.style.display = 'block';
     }
 }
 
 // Exemplo de uso no contexto do nextStep
 async function nextStep(button) {
     try {
-        // Ocultar os itens do carrinho antes de mostrar os endereços
         hideCartItems();
 
         const observacao = document.getElementById("observacao").value;
         const totalPrice = cart.reduce((total, item) => total + (item.preco * item.quantidade), 0);
         const user = JSON.parse(button.getAttribute('data-user'));
+        const nextButton = document.getElementById('nextButton');
+        const backButton = document.getElementById('backButton');
+
+        if (backButton) {
+            backButton.innerHTML = `
+            <button onclick="backStep(this)" class="btn btn-success" data-user='${JSON.stringify(user)}'>Voltar</button>
+        `;
+        }
+
+        if (nextButton) {
+            nextButton.innerHTML = `
+            <button onclick="nextStep(this)" class="btn btn-second" data-user='${JSON.stringify(user)}'>Concluir</button>
+        `;
+        }
+
+        const observacaoContainer = document.getElementById("observacaoContainer");
+        if (observacaoContainer) {
+            observacaoContainer.innerHTML = `
+                <label for="observacao" id="labelObs">Forma de pagamento</label>
+                <select id="observacao">
+                    <option value="debito">Débito</option>
+                    <option value="credito">Crédito</option>
+                    <option value="dinheiro">Dinheiro</option>
+                    <option value="pix">Pix</option>
+                </select>
+            `;
+        }
 
         const cartData = {
             produtos: cart.map(item => {
@@ -150,16 +176,13 @@ async function nextStep(button) {
             valorTotal: totalPrice
         };
 
-        console.log(23123)
         const response = await fetch('/enderecos', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user: user })
         });
 
-        console.log(await response)
-        const enderecos = await response;
-        console.log(enderecos)
+        const enderecos = await response.json();
 
         const cartItemsContainer = document.getElementById("cartItems");
         const addressContainer = document.getElementById("addressContainer");
@@ -169,33 +192,114 @@ async function nextStep(button) {
         addressContainer.innerHTML = "";
 
         if (enderecos.length > 0) {
-            console.log(123123)
             enderecos.forEach(endereco => {
-                console.log(endereco)
                 const addressItem = document.createElement("div");
                 addressItem.classList.add("address-item");
+
                 addressItem.innerHTML = `
-                    <p><strong>${endereco.nome}</strong></p>
-                    <p>${endereco.rua}, ${endereco.numero}</p>
+                <input type="radio" name="selectedAddress" value="${endereco.id}" id="address_${endereco.id}" onclick="selectAddress(${endereco.id})">
+                <label for="address_${endereco.id}">
+                    <p><strong>${endereco.logradouro}</strong></p>
+                    <p>${endereco.bairro}, ${endereco.numero}</p>
                     <p>${endereco.cidade} - ${endereco.estado}</p>
                     <p>CEP: ${endereco.cep}</p>
-                `;
+                </label>
+        `;
                 addressContainer.appendChild(addressItem);
             });
         } else {
-            console.log(6675);
             addressContainer.innerHTML = "<p>Não há endereços.</p>";
-            const novoEnderecoBtn = document.createElement("button");
-            novoEnderecoBtn.innerText = "Novo Endereço";
-            novoEnderecoBtn.classList.add("btn", "btn-primary");
-            novoEnderecoBtn.onclick = () => window.location.href = "/novo-endereco";
-            addressContainer.appendChild(novoEnderecoBtn);
         }
 
+        let selectedAddressId = null;
+        const novoEnderecoBtn = document.createElement("button");
+        novoEnderecoBtn.innerText = "Novo Endereço";
+        novoEnderecoBtn.classList.add("btn", "btn-success");
+        novoEnderecoBtn.onclick = () => newAddress();
+
         addressContainer.style.display = 'block';
+        addressContainer.appendChild(novoEnderecoBtn);
 
     } catch (error) {
         console.error("Erro ao carregar endereços:", error);
     }
 }
 
+function backStep(user) {
+    try {
+        showCartItems();
+
+        const addressContainer = document.getElementById("addressContainer");
+        if (addressContainer) {
+            addressContainer.style.display = 'none';
+        }
+
+        const nextButtonContainer = document.getElementById("nextButton");
+        const backButtonContainer = document.getElementById("backButton");
+
+        if (nextButtonContainer) {
+            nextButtonContainer.innerHTML = `
+                <button onclick="nextStep(this)" class="btn btn-second" data-user='${JSON.stringify(user)}'>Próximo</button>
+            `;
+        }
+
+        if (backButtonContainer) {
+            backButtonContainer.innerHTML = '';
+        }
+
+        const observacaoContainer = document.getElementById("observacaoContainer");
+        if (observacaoContainer) {
+            observacaoContainer.innerHTML = `
+                <label for="observacao" id="labelObs">Observação</label>
+                <input type="text" name="observacao" id="observacao"></input>
+            `;
+        }
+
+    } catch (error) {
+        console.error("Erro ao voltar para a etapa anterior:", error);
+    }
+}
+
+function selectAddress(id) {
+    selectedAddressId = id;
+}
+
+function newAddress () {
+    Swal.fire({
+        title: 'Novo Endereço',
+        html: `
+            <input type="text" id="nome" class="swal2-input" placeholder="Logradouro" required>
+            <input type="text" id="bairro" class="swal2-input" placeholder="Bairro" required>
+            <input type="text" id="numero" class="swal2-input" placeholder="Número" >
+            <input type="text" id="cidade" class="swal2-input" placeholder="Cidade">
+            <input type="text" id="estado" class="swal2-input" placeholder="Estado">
+            <input type="text" id="comp" class="swal2-input" placeholder="Complemento">
+            <input type="text" id="ref" class="swal2-input" placeholder="Referência">
+        `,
+        confirmButtonText: 'Salvar',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        customClass:{
+            confirmButton: 'btn btn-second',
+            cancelButton: 'btn btn-success'
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const endereco = result.value;
+
+            fetch('/enderecos/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(endereco)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    Swal.fire('Sucesso', 'Endereço adicionado com sucesso!', 'success');
+                })
+                .catch(error => {
+                    console.error('Erro ao adicionar o endereço:', error);
+                    Swal.fire('Erro', 'Não foi possível adicionar o endereço.', 'error');
+                });
+        }
+    });
+}

@@ -18,7 +18,10 @@ app.use(session({
     secret: 'exerIsTGHyhAPfuWDgjqWw',
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 60 * 60 * 1000 }
+    cookie: {
+        maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+    }
 }));
 
 // ===== INSTÂNCIAS =====
@@ -32,6 +35,8 @@ const Usuario = require('./models/usuario');
 const PedidoProduto = require('./models/produtoPedido');
 const Pedido = require('./models/pedido');
 const Token = require('./models/personalAccessTokens');
+const UsuarioEndereco = require('./models/usuarioEndereco');
+const Endereco = require('./models/endereco');
 
 // ===== INSTÂNCIAS DE CONTROLLER =====
 const {
@@ -64,10 +69,14 @@ const {
     indexPedidos,
     getPedidos,
     updatePedidos,
-    destroyPedidos
+    destroyPedidos,
+    storePedidos,
+    pedidosCliente
 } = require('./controllers/pedidoController');
 const {
-    indexEnderecos
+    indexEnderecos,
+    storeEnderecos,
+    destroyEnderecos
 } = require('./controllers/enderecoController')
 const {
     sendOtpEmail,
@@ -319,6 +328,15 @@ app.get('/produtos/search', authMiddleware, verifyUserAbility, async (req, res) 
     }
 });
 app.get('/produtos/:id' , authMiddleware, verifyUserAbility, async (req, res) => {
+    const response = await getProdutos(req, res);
+
+    if (response.error) {
+        return res.status(500).json({ message: response.error });
+    }
+
+    res.json(response);
+});
+app.get('/produtos/cliente/:id' , authMiddleware, async (req, res) => {
     const response = await getProdutos(req, res);
 
     if (response.error) {
@@ -622,6 +640,20 @@ app.delete('/funcionarios/delete/:id' ,authMiddleware, verifyUserAbility,async (
 });
 
 // ===== ROTAS DE GERENCIAMENTO DE PEDIDOS =====
+app.get('/cliente/pedidos/:id', authMiddleware, async (req, res) => {
+    try {
+        const response = await pedidosCliente(req);
+
+        console.log(response)
+        if (response.error) {
+            res.redirect(`/home?success=false&message=${encodeURIComponent(response)}`);
+        }
+
+        res.render('home/pedidosCliente', { pedidos: response })
+    } catch (error) {
+        console.error('Erro no upload:', error);
+    }
+})
 app.get('/pedidos', authMiddleware, verifyUserAbility,async (req, res) => {
     const response = await indexPedidos(req);
 
@@ -673,12 +705,22 @@ app.get('/pedidos/:id/produtos',authMiddleware, verifyUserAbility,async (req, re
                     attributes: ['nome']
                 });
 
+                const enderecoUsuario = await UsuarioEndereco.findOne({
+                    where: {
+                        id_cliente: pedidoValue.id_usuario,
+                        status: 1
+                    }
+                })
+
+                const endereco = await Endereco.findByPk(enderecoUsuario.id_endereco);
+
                 return {
                     id_produto: pedido.id_produto,
                     nome: produto ? produto.nome : 'Produto não encontrado',
                     quantidade: pedido.quantidade,
                     status: pedido.status,
-                    cliente: cliente ? cliente.nome : 'Cliente não encontrado'
+                    cliente: cliente ? cliente.nome : 'Cliente não encontrado',
+                    endereco: endereco ? endereco : 'Endereço não encontrado'
                 };
             })
         );
@@ -726,16 +768,13 @@ app.get('/pedidos/:id' , authMiddleware, verifyUserAbility,async (req, res) => {
 });
 app.post('/pedidos/create', async (req, res) => {
     try {
-        const response = await storeCategorias(req);
+        const response = await storePedidos(req);
 
         if (response === true) {
-            res.redirect('/categorias?success=true&message=Categoria criada com sucesso!');
-        } else {
-            res.redirect('/categorias?success=false&message=${encodeURIComponent(response)}');
+            res.json(response);
         }
     } catch (error) {
         console.error('Erro no upload:', error);
-        res.redirect('/categorias?success=false&message=Erro ao criar categoria');
     }
 });
 app.post('/pedidos/update/:id', authMiddleware, verifyUserAbility,async (req, res) => {
@@ -778,6 +817,28 @@ app.post('/enderecos', authMiddleware, async (req, res) => {
     }
 
     res.json(response);
+});
+app.post('/enderecos/create', async (req, res) => {
+    try {
+        const response = await storeEnderecos(req);
+
+        if (response === true) {
+            res.json(response)
+        }
+    } catch (error) {
+        console.error('Erro no upload:', error);
+    }
+});
+app.delete('/enderecos/delete/:id', async (req, res) => {
+    try {
+        const response = await destroyEnderecos(req);
+
+        if (response === true) {
+            res.json(response)
+        }
+    } catch (error) {
+        console.error('Erro no upload:', error);
+    }
 });
 
 

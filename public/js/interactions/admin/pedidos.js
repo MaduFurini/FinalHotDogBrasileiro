@@ -240,6 +240,7 @@ function renderProducts(products) {
                         timeZone: 'America/Sao_Paulo'
                     }).format(new Date(product.createdAt)) }
                 </td>
+                <td>${product.status}</td>
                 <td>
                     <button id="editBtn" class="btn btn-success" style="margin-right: 5px;" onclick="openUpdateModal(<%= pedido.id %>)">Editar</button>
                     <button id="deleteBtn" class="btn btn-danger" onclick="deleteProduct(<%= pedido.id %>)">Excluir</button>
@@ -281,6 +282,7 @@ function buscarProdutos(element) {
 
     fetch(`/pedidos/${pedidoId}/produtos`)
         .then(response => {
+            console.log(response)
             if (!response.ok) {
                 throw new Error('Erro ao buscar produtos');
             }
@@ -302,6 +304,9 @@ function buscarProdutos(element) {
                     tooltip.innerHTML += `
                         <div>
                             <strong>Cliente:</strong> ${p.cliente}<br>
+                        </div>
+                            <strong>Endereço:</strong> ${p.endereco.logradouro} - 
+                            ${p.endereco.bairro}, ${p.endereco.numero}<br>
                         </div>
                         <hr>
                     `;

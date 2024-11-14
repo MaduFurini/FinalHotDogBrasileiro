@@ -1,5 +1,6 @@
 'use strict';
 
+const bodyParser = require("body-parser");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -41,6 +42,11 @@ module.exports = {
       referencia:{
         type: Sequelize.STRING,
         allowNull: false
+      },
+      status: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        default: true
       },
       createdAt: {
         type: Sequelize.DATE,

@@ -20,11 +20,6 @@ body {
     color: #333;
 }
 
-.main-disabled {
-    opacity: 0.5;
-    pointer-events: none;
-}
-
 main {
     flex: 1;
     height: 90vh;
@@ -188,15 +183,21 @@ nav .nav-links a:hover {
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 20px;
-    text-align: center;
-    width: calc(30% - 20px);
+    text-align: left;
+    width: calc(90% - 20px);
     height: auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    margin: auto;
 }
 
 .menu-item:hover {
     transform: scale(1.05);
+}
+
+.menu-item h3 {
+    text-align: center;
+    color: #800000;
 }
 
 .menu-item .nome {
@@ -213,8 +214,6 @@ nav .nav-links a:hover {
 }
 
 .menu-item p:first-of-type {
-    font-weight: bold;
-    color: #800000;
     margin-top: 10px;
 }
 

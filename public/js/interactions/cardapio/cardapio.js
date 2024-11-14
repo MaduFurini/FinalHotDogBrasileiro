@@ -8,7 +8,7 @@ async function addToCart(user, produtoId) {
         return;
     }
 
-    const produto = await fetch(`/produtos/${produtoId}`)
+    const produto = await fetch(`/produtos/cliente/${produtoId}`)
         .then(response => response.json())
         .catch(error => {
             console.error('Erro ao buscar o produto:', error);
@@ -29,11 +29,18 @@ async function addToCart(user, produtoId) {
 
 function toggleCart() {
     const cartModal = document.getElementById("cartModal");
+    const body = document.getElementById('main');
+
     if (cartModal) {
         cartModal.classList.toggle("show");
+
+        if (cartModal.classList.contains("show")) {
+            body.classList.add("main-disabled");
+        } else {
+            body.classList.remove("main-disabled");
+        }
     }
 }
-
 function renderCartItems(user) {
     const cartItemsContainer = document.getElementById("cartItems");
     const totalPriceContainer = document.getElementById("totalPrice");
@@ -133,6 +140,7 @@ function showCartItems() {
 }
 
 // Exemplo de uso no contexto do nextStep
+let selectedAddressId = null;
 async function nextStep(button) {
     try {
         hideCartItems();
@@ -146,12 +154,6 @@ async function nextStep(button) {
         if (backButton) {
             backButton.innerHTML = `
             <button onclick="backStep(this)" class="btn btn-success" data-user='${JSON.stringify(user)}'>Voltar</button>
-        `;
-        }
-
-        if (nextButton) {
-            nextButton.innerHTML = `
-            <button onclick="nextStep(this)" class="btn btn-second" data-user='${JSON.stringify(user)}'>Concluir</button>
         `;
         }
 
@@ -204,6 +206,9 @@ async function nextStep(button) {
                     <p>${endereco.cidade} - ${endereco.estado}</p>
                     <p>CEP: ${endereco.cep}</p>
                 </label>
+                <button onclick="deleteAddress(${endereco.id})" class="delete-button" title="Excluir endereço">
+                    <span class="material-symbols-sharp">Excluir</span>                
+                </button>
         `;
                 addressContainer.appendChild(addressItem);
             });
@@ -211,15 +216,21 @@ async function nextStep(button) {
             addressContainer.innerHTML = "<p>Não há endereços.</p>";
         }
 
-        let selectedAddressId = null;
         const novoEnderecoBtn = document.createElement("button");
         novoEnderecoBtn.innerText = "Novo Endereço";
         novoEnderecoBtn.classList.add("btn", "btn-success");
-        novoEnderecoBtn.onclick = () => newAddress();
+        novoEnderecoBtn.onclick = () => newAddress(user);
 
         addressContainer.style.display = 'block';
         addressContainer.appendChild(novoEnderecoBtn);
 
+        if (nextButton) {
+            nextButton.innerHTML = `
+            <button onclick="finish(this)" class="btn btn-second" data-user='${JSON.stringify(user)}' 
+                data-pedido='${JSON.stringify(cartData)}'
+                data-formaPag='${JSON.stringify(document.getElementById('observacao').value)}'>Concluir</button>
+        `;
+        }
     } catch (error) {
         console.error("Erro ao carregar endereços:", error);
     }
@@ -264,37 +275,70 @@ function selectAddress(id) {
     selectedAddressId = id;
 }
 
-function newAddress () {
+function newAddress(user) {
     Swal.fire({
         title: 'Novo Endereço',
         html: `
-            <input type="text" id="nome" class="swal2-input" placeholder="Logradouro" required>
-            <input type="text" id="bairro" class="swal2-input" placeholder="Bairro" required>
-            <input type="text" id="numero" class="swal2-input" placeholder="Número" >
+            <input type="text" id="nome" class="swal2-input" placeholder="Logradouro*" required>
+            <input type="text" id="bairro" class="swal2-input" placeholder="Bairro*" required>
+            <input type="text" id="numero" class="swal2-input" placeholder="Número">
             <input type="text" id="cidade" class="swal2-input" placeholder="Cidade">
             <input type="text" id="estado" class="swal2-input" placeholder="Estado">
-            <input type="text" id="comp" class="swal2-input" placeholder="Complemento">
-            <input type="text" id="ref" class="swal2-input" placeholder="Referência">
+            <input type="text" id="cep" class="swal2-input" placeholder="CEP*" required>
+            <input type="text" id="comp" class="swal2-input" placeholder="Complemento*" required>
+            <input type="text" id="ref" class="swal2-input" placeholder="Referência*" required>
         `,
-        confirmButtonText: 'Salvar',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        customClass:{
+        confirmButtonText: 'Salvar',
+        customClass: {
             confirmButton: 'btn btn-second',
             cancelButton: 'btn btn-success'
         },
+        preConfirm: () => {
+            const endereco = {
+                nome: document.getElementById('nome').value,
+                bairro: document.getElementById('bairro').value,
+                numero: document.getElementById('numero').value,
+                cidade: document.getElementById('cidade').value,
+                estado: document.getElementById('estado').value,
+                comp: document.getElementById('comp').value,
+                cep: document.getElementById('cep').value,
+                ref: document.getElementById('ref').value
+            };
+
+            if (!endereco.nome || !endereco.bairro || !endereco.cep || !endereco.comp || !endereco.ref) {
+                Swal.showValidationMessage('Por favor, preencha todos os campos obrigatórios.');
+                return false;
+            }
+
+            return endereco;
+        }
     }).then((result) => {
         if (result.isConfirmed) {
             const endereco = result.value;
+            console.log(endereco);
 
             fetch('/enderecos/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(endereco)
-            })
-                .then(response => response.json())
+                body: JSON.stringify({
+                    endereco: endereco,
+                    user: user
+                })
+            }).then(response => response.json())
                 .then(data => {
-                    Swal.fire('Sucesso', 'Endereço adicionado com sucesso!', 'success');
+                    Swal.fire({
+                        title: 'Sucesso',
+                        text: 'Endereço adicionado com sucesso!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'btn btn-second'
+                        }
+                    }).then(() => {
+                        window.location.reload();
+                    });
                 })
                 .catch(error => {
                     console.error('Erro ao adicionar o endereço:', error);
@@ -303,3 +347,93 @@ function newAddress () {
         }
     });
 }
+
+function finish(button) {
+    if (!selectedAddressId) {
+        Swal.fire('Atenção', 'Por favor, selecione um endereço antes de concluir.', 'warning');
+        return;
+    }
+
+    const user = JSON.parse(button.getAttribute('data-user'));
+    const produtos = JSON.parse(button.getAttribute('data-pedido'));
+    const formaPag = JSON.parse(button.getAttribute('data-formaPag'));
+
+    fetch('/pedidos/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            user: user,
+            produtos: produtos,
+            formaPag: formaPag,
+            endereco: selectedAddressId
+        })
+    }).then(response => response.json())
+        .then(data => {
+            Swal.fire('Sucesso', 'Pedido registrado com sucesso!', 'success').then(() => {
+                window.location.reload();
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao registrar pedido:', error);
+            Swal.fire('Erro', 'Não foi possível registrar o pedido', 'error');
+        });
+
+}
+
+function deleteAddress(endereco) {
+    console.log(endereco)
+    Swal.fire({
+        title: 'Tem certeza?',
+        text: "Essa ação não pode ser desfeita!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim, excluir!',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-second'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/enderecos/delete/${endereco}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na requisição: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data === true) {
+                            Swal.fire({
+                                title: 'Excluído!',
+                                text: 'O endereço foi excluído.',
+                                icon: 'success',
+                                confirmButtonText: 'OK',
+                                customClass: {
+                                    confirmButton: 'btn-second'
+                                }
+                            })
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1500);
+                    } else {
+                        Swal.fire(
+                            'Erro!',
+                            'Resposta do servidor inválida.',
+                            'error'
+                        );
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao excluir endereço:', error);
+                    Swal.fire('Erro!', 'Erro ao excluir endereço.', 'error');
+                });
+        }
+    });
+}
+

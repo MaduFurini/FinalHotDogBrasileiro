@@ -149,8 +149,8 @@ aside .logo{
     gap: 1rem;
 }
 aside .logo img{
-    width: 8rem;
-    height: 8rem;
+    width: 90%;
+    height: 90%;
 }
 aside .top div.close span{
     display: none;
@@ -361,6 +361,9 @@ main .insights .progress .number{
 
 /* recent order */
 
+main .recent_order {
+    height: 70vh;
+}
 
 main .recent_order h2{
     color: var(--clr-dark);
@@ -384,7 +387,6 @@ main .recent_order table:hover{
 }
 
 main table tbody td{
-    height: 3.8rem;
     border-bottom: 1px solid var(--clr-white);
     color:var(--clr-dark-variant)
 }

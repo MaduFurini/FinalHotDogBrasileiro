@@ -3,92 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hot Dog Brasileiro | Cardápio</title>
-    <link rel="stylesheet" href="/css/cardapio/cardapio.css">
+    <title>Menu de Hot Dogs</title>
+    <link rel="stylesheet" href="/css/home/pedidoCliente.css">
     <link rel="shortcut icon" href="/images/logo.png">
-
+    <title>Hot Dog Brasileiro | Pedidos</title>
 </head>
 <body>
-    <main id="main">
+    <main>
         <header>
             <nav class="navbar">
                 <div>
                     <img src="/images/logo.png" alt="Logo Hot Dog" class="logo">
                 </div>
                 <div class="title">
-                    <h1 class="menu-title">Cardápio</h1>
+                    <h1 class="menu-title">Pedidos</h1>
                 </div>
                 <div class="nav-links">
-                    <a href="/home">INÍCIO</a>
-                    <a href="/login" id="loginBtn">Cadastre-se</a>
+                    <a href="/home">Voltar</a>
                 </div>
             </nav>
         </header>
 
         <% let produtosEncontrados = 0; %>
 
-        <% categorias.forEach(categoria => { %>
-            <% if (produtosPorCategoria[categoria.id] && produtosPorCategoria[categoria.id].length > 0) { %>
-                <% produtosEncontrados++; %>
+
+        <% if (pedidos && pedidos.length > 0) { %>
+            <% produtosEncontrados++; %>
+            <section class="section">
+            <% pedidos.forEach(pedido => { %>
                 <section class="section">
-                    <div class="title-container">
-                        <hr class="hr-top">
-                        <hr class="hr-bottom">
-                        <h2><%= categoria.nome %></h2>
-                    </div>
-                    <div class="menu-items">
-                        <% produtosPorCategoria[categoria.id].forEach(produto => { %>
-                            <div class="menu-item">
-                                <img src="<%= produto.img ? produto.img : 'images/produtos/default.webp' %>" alt="<%= produto.nome %>" />
-                                <p class="nome"><%= produto.nome %></p>
-                                <% if (produto.descricao) { %>
-                                    <p class="descricao"><%= produto.descricao %></p>
-                                <% } else { %>
-                                    <p class="descricao" style="visibility: hidden;">&nbsp;</p>
-                                <% } %>
-                                <p>R$ <%= produto.preco.toFixed(2) %></p>
-                                <button id="adicionarBtn" onclick="addToCart(<%= JSON.stringify(user) %>, '<%= produto.id %>')">Adicionar</button>
-                            </div>
+                    <div class="menu-item">
+                        <h3>Código do Pedido: <%= pedido.codigo %></h3>
+                        <% pedido.produtos.forEach(produto => { %>
+                            <p><strong>Produto:</strong> <%= produto.nome_produto %></p>
+                            <p><strong>Quantidade:</strong> <%= produto.quantidade %></p>
+                            <br>
+                            <hr />
                         <% }) %>
+                        <p><strong>Status:</strong> <%= pedido.status %></p>
                     </div>
                 </section>
-            <% } %>
-        <% }) %>
+            <% }) %>
+        <% } %>
+
 
         <% if (produtosEncontrados === 0) { %>
             <div class="no-products">
                 <img src="/images/noProduct.png" alt="Nenhum produto encontrado" />
-                <p>Ops! Houve um erro ao buscar produtos. Tente novamente mais tarde</p>
+                <p>Ops! Parece que você ainda não realizou pedidos</p>
             </div>
         <% } %>
     </main>
-
-
-            <div id="cartModal">
-                <div class="modal-header">
-                    <h2>Carrinho</h2>
-                    <button class="close-btn" onclick="toggleCart()">×</button>
-                </div>
-                <div id="cartItems">
-                    <!-- Produtos adicionados ao carrinho serão exibidos aqui -->
-                </div>
-                <div id="addressContainer">
-                    <!-- Aqui os endereços serão exibidos dinamicamente -->
-                </div>
-                <div class="modal-footer">
-                    <div id="observacaoContainer">
-                        <label for="observacao" id="labelObs">Observação</label>
-                        <input type="text" name="observacao" id="observacao"></input>
-                    </div>
-                    <div id="totalPrice" class="total-price"></div>
-                    <div class="buttons">
-                        <div id="nextButton"></div>
-                        <div id="backButton"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="cartPullIcon" onclick="openCartModal()" style="display: none;">&#9654;</div>
 
 
      <footer>
@@ -112,39 +77,6 @@
 
    <script src="/js/interactions/cardapio/cardapio.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-            let userData = <%- JSON.stringify(user) %>;
-            userData = userData.user;
 
-            document.addEventListener("DOMContentLoaded", function() {
-                if (userData) {
-                    const idUser = userData.id;
-                    const userTipo = userData.tipo_usuario;
-
-                    const cadastroButton = document.getElementById("loginBtn");
-
-                    if (idUser && userTipo) {
-                        if (userTipo === 'admin') {
-                            cadastroButton.textContent = 'Painel de Controle';
-                            cadastroButton.href = '/pedidos';
-                        } else if (userTipo === 'cliente') {
-                            const nav = document.querySelector('.nav-links');
-
-                            const pedidoButton = document.createElement('a');
-                            pedidoButton.textContent = 'PEDIDOS';
-                            pedidoButton.href = `/cliente/pedidos/${userData.id}`;
-
-                            cadastroButton.textContent = 'Sair';
-                            cadastroButton.href = '/sair';
-
-                            nav.insertBefore(pedidoButton, cadastroButton);
-                        }
-                    } else {
-                        cadastroButton.textContent = 'Cadastre-se';
-                    }
-                }
-            });
-
-    </script>
 </body>
 </html>

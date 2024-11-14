@@ -251,8 +251,8 @@ function deleteProduct(productId) {
         confirmButtonText: 'Sim, excluir!',
         cancelButtonText: 'Cancelar',
         customClass: {
-            confirmButton: 'btn btn-primary',
-            cancelButton: 'btn btn-danger'
+            confirmButton: 'btn btn-danger',
+            cancelButton: 'btn btn-second'
         }
     }).then((result) => {
         if (result.isConfirmed) {

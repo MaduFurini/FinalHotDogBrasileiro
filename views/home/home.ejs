@@ -21,7 +21,7 @@
 
             <div class="nav-links">
                 <a href="/cardapio">CARDAPIO</a>
-                <a href="#">SOBRE</a>
+                <a href="#sobre-container">SOBRE</a>
                 <a href="/login" id="loginBtn">Cadastre-se</a>
             </div>
         </nav>
@@ -126,6 +126,7 @@
         </div>
     </footer>
    <script src="/js/interactions/home/home.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         let userData = <%- JSON.stringify(user) %>;
@@ -147,7 +148,7 @@
 
                         const pedidoButton = document.createElement('a');
                         pedidoButton.textContent = 'PEDIDOS';
-                        pedidoButton.href = '/pedidos/cliente';
+                        pedidoButton.href = `/cliente/pedidos/${userData.id}`;
 
                         cadastroButton.textContent = 'Sair';
                         cadastroButton.href = '/sair';
@@ -163,6 +164,37 @@
                 menuLink.href = '/cardapio'
             }
         });
+
+         function getQueryParam(param) {
+             const urlParams = new URLSearchParams(window.location.search);
+             return urlParams.get(param);
+         }
+
+         function removeQueryParams() {
+             const url = new URL(window.location.href);
+             url.search = '';
+             window.history.replaceState({}, document.title, url.toString());
+         }
+
+         function showMessageModal(success, message) {
+             Swal.fire({
+                 title: success === 'true' ? 'Sucesso!' : 'Erro!',
+                 text: message,
+                 icon: success === 'true' ? 'success' : 'error',
+                 showConfirmButton: false,
+                 timer: 3000,
+                 willClose: () => {
+                     removeQueryParams();
+                 }
+             });
+         }
+
+         const success = getQueryParam('success');
+         const message = getQueryParam('message');
+
+         if (message) {
+             showMessageModal(success, message);
+         }
     </script>
 
 </body>

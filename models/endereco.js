@@ -40,6 +40,11 @@ const Endereco = database.define('enderecos', {
         type: Sequelize.STRING,
         allowNull: false
     },
+    status: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        default: true
+    },
     createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

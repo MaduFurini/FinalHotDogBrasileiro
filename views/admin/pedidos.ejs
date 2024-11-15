@@ -118,7 +118,6 @@
                                     timeZone: 'America/Sao_Paulo'
                                 }).format(new Date(pedido.createdAt)) %>
                             </td>
-                            <td><%= pedido.status%></td>
                             <td>
                                 <button id="editBtn" class="btn btn-success" style="margin-right: 5px;" onclick="openUpdateModal(<%= pedido.id %>)">Editar</button>
                                 <button id="deleteBtn" class="btn btn-danger" onclick="deleteProduct(<%= pedido.id %>)">Excluir</button>

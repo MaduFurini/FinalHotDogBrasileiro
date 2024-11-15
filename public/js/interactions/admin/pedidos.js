@@ -67,7 +67,7 @@ function openUpdateModal(productId) {
                             </div>
                             <div class="form-group">
                                 <label for="valor">Valor total</label>
-                                <input type="number" class="input" id="valor" name="valor" step="0.1" value="${pedido.valorTotal}">
+                                <input type="number" class="input" id="valor" name="valor" step="0.1" value="${pedido.valorTotal}" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="status">Status</label>
@@ -240,7 +240,6 @@ function renderProducts(products) {
                         timeZone: 'America/Sao_Paulo'
                     }).format(new Date(product.createdAt)) }
                 </td>
-                <td>${product.status}</td>
                 <td>
                     <button id="editBtn" class="btn btn-success" style="margin-right: 5px;" onclick="openUpdateModal(<%= pedido.id %>)">Editar</button>
                     <button id="deleteBtn" class="btn btn-danger" onclick="deleteProduct(<%= pedido.id %>)">Excluir</button>
